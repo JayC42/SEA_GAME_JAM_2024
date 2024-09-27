@@ -16,29 +16,29 @@ public class PlayerInventory : MonoBehaviour
            Destroy(gameObject);
        }
     }
-    
-    public int dishUpgradeCount = 1; // Start with 1 dish available by default
+    //public int dishUpgradeCount = 1; 
+    public int maxDishCount = 3; // Start with 1 dish available by default
     private bool purchaseCustomerMaxQuantityUpgrade = false;   // Track if the upgrade has been purchased
 
     // This method increments the number of dish upgrades the player has purchased
     public void PurchaseDishUpgrade()
     {
         // For example, a player could purchase up to 3 upgrades
-        dishUpgradeCount = Mathf.Clamp(dishUpgradeCount + 1, 1, 3);
-        Debug.Log("Dish upgrade purchased. Current available dishes: " + dishUpgradeCount);
+        maxDishCount = Mathf.Clamp(maxDishCount + 1, 1, 3);
+        Debug.Log("Dish upgrade purchased. Current available dishes: " + maxDishCount);
     }
 
     // Optionally, you could refund a dish upgrade
     public void RefundDishUpgrade()
     {
-        dishUpgradeCount = Mathf.Clamp(dishUpgradeCount - 1, 1, 3);
-        Debug.Log("Dish upgrade refunded. Current available dishes: " + dishUpgradeCount);
+        maxDishCount = Mathf.Clamp(maxDishCount - 1, 1, 3);
+        Debug.Log("Dish upgrade refunded. Current available dishes: " + maxDishCount);
     }
 
     // Retrieve the current dish upgrade count
     public int GetDishUpgradeCount()
     {
-        return dishUpgradeCount;
+        return maxDishCount;
     }
     public void PurchaseCustomerMaxQuantityUpgrade()
     {

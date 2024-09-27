@@ -1,10 +1,13 @@
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
 public class CustomerPool : MonoBehaviour
 {
     [Header("Customer Settings")]
     public GameObject customerPrefab;
+    public Transform entrance; // The entrance where customers will spawn
+    public List<Transform> seats = new List<Transform>(); // The seats in the game
 
     [Range(5, 50)]
     [Tooltip("Maximum number of customers in the pool.")]
@@ -24,6 +27,35 @@ public class CustomerPool : MonoBehaviour
     public float hardSpawnRate = 5f;
 
     private List<GameObject> pool = new List<GameObject>();
+    private GameOrderManager gameOrderManager;
+    private int currentSeatIndex = 0; // The index of the current seat
+    public List<bool> isSeatOccupied = new List<bool>(); // Whether each seat is occupied
+
+    private void Start()
+    {
+        gameOrderManager = FindObjectOfType<GameOrderManager>();
+
+        // Check if the customer max quantity upgrade is purchased
+        if (PlayerInventory.Instance.IsCustomerMaxQuantityUpgradePurchased())
+        {
+            maxPoolSize = 30; // Adjust this value based on your game's requirements
+        }
+
+        InitializePool(maxPoolSize);
+        InvokeRepeating("SpawnCustomer", 0f, 3f); // Spawn a customer every 3 seconds
+
+        // Ensure seats list is populated correctly
+        if (seats.Count == 0)
+        {
+            Debug.LogError("Seats list is empty! Make sure all seats are assigned.");
+        }
+
+        for (int i = 0; i < seats.Count; i++)
+        {
+            isSeatOccupied.Add(false); // Initialize seat occupancy
+        }
+
+    }
 
     public void InitializePool(int totalCustomers)
     {
@@ -34,20 +66,60 @@ public class CustomerPool : MonoBehaviour
             customer.SetActive(false);
             pool.Add(customer);
         }
+
+        // Generate orders for the customers
+        gameOrderManager.InitializeOrdersForTenCustomers();
     }
 
     public void SpawnCustomer()
     {
-        foreach (GameObject customer in pool)
+        // Check if there are available seats
+        if (currentSeatIndex < seats.Count && !isSeatOccupied[currentSeatIndex])
         {
-            if (!customer.activeInHierarchy)
+            foreach (GameObject customer in pool)
             {
-                customer.SetActive(true);
-                customer.transform.position = GetRandomSpawnPosition(); // Define your spawn position logic here
-                break;
+                if (!customer.activeInHierarchy)
+                {
+                    customer.SetActive(true);
+                    customer.GetComponent<Customer>().EnterRestaurant(entrance); // Enter the restaurant
+                    // Find the first unoccupied seat and move the customer there
+                    for (int i = 0; i < seats.Count; i++)
+                    {
+                        if (!isSeatOccupied[i]) // If the seat is not occupied
+                        {
+                            customer.GetComponent<Customer>().MoveToSeat(seats[i]); // Move to the available seat
+                            isSeatOccupied[i] = true; // Mark this seat as occupied
+                            currentSeatIndex = i; // Set the current seat index to the seat the customer moved to
+                            break; // Exit the loop once the customer has been seated
+                        }
+                        
+                    }
+                }
             }
         }
     }
+    public void CustomerLeftSeat(Transform seat)
+    {
+        int seatIndex = seats.IndexOf(seat);
+
+        // Ensure seatIndex is valid
+        if (seatIndex >= 0 && seatIndex < seats.Count)
+        {
+            // Mark the seat as unoccupied
+            isSeatOccupied[seatIndex] = false;
+
+            // Adjust the current seat index if necessary
+            if (currentSeatIndex > seatIndex)
+            {
+                currentSeatIndex--;
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Seat not found in the list, cannot unoccupy.");
+        }
+    }
+
 
     public float GetSpawnRate(int level)
     {
@@ -58,10 +130,5 @@ public class CustomerPool : MonoBehaviour
         else
             return hardSpawnRate; // Adjust rates as needed for higher levels
     }
-
-    private Vector3 GetRandomSpawnPosition()
-    {
-        // Return a random position based on your game's layout
-        return new Vector3(Random.Range(-5f, 5f), 0, 0); // Example position range
-    }
 }
+

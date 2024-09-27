@@ -18,10 +18,11 @@ public class Order
         if (quantity > 0)
         {
             DishData dish = DishesManager.Instance.GetDishByName(dishName);
-            for (int i = 0; i < quantity; i++)
-            {
-                orderedDishes.Add(dish);
-            }
+            // for (int i = 0; i < quantity; i++)
+            // {
+            //     orderedDishes.Add(dish);
+            // }
+            orderedDishes.Add(dish);
             dishQuantities.Add(quantity);
         }
     }
@@ -67,18 +68,44 @@ public class Order
 
         return ingredients;
     }
-
-    public bool ValidateOrder(DishData servedDish)
+    public bool ValidateOrder(List<DishData> servedDishes)
     {
-        foreach (var dish in orderedDishes)
+        Dictionary<DishData, int> remainingQuantities = new Dictionary<DishData, int>();
+        for (int i = 0; i < orderedDishes.Count; i++)
         {
-            if (servedDish == dish)
+            remainingQuantities[orderedDishes[i]] = dishQuantities[i];
+        }
+
+        foreach (DishData servedDish in servedDishes)
+        {
+            if (remainingQuantities.ContainsKey(servedDish) && remainingQuantities[servedDish] > 0)
             {
-                return true;
+                remainingQuantities[servedDish]--;
+            }
+            else
+            {
+                return false;
             }
         }
-        return false;
+
+        return remainingQuantities.Values.All(quantity => quantity == 0);
     }
+    public bool IsOrderComplete()
+    {
+        return orderedDishes.Count == 0 && dishQuantities.Sum() == 0;
+    }
+    // public bool ValidateOrder(DishData servedDish)
+    // {
+    //     foreach (var dish in orderedDishes)
+    //     {
+    //         if (servedDish == dish)
+    //         {
+    //             return true;
+    //         }
+    //     }
+    //     return false;
+    // }
+
     // Method to get quantity of a specific dish
     public int GetDishQuantity(DishData dish)
     {

@@ -3,8 +3,11 @@ using System.Collections.Generic;
 
 public class GameOrderManager : MonoBehaviour
 {
+    [SerializeField]
     private int remainingBurritos = 15;
+    [SerializeField]
     private int remainingPizzas = 15;
+    [SerializeField]
     private int remainingDoughnuts = 20;
 
     private List<Order> allOrders = new List<Order>();
@@ -22,6 +25,7 @@ public class GameOrderManager : MonoBehaviour
     private Order GenerateCustomerOrder()
     {
         Order order = new Order();
+        Debug.Log("New Order object created.");
 
         // Check if the upgrade has been purchased
         bool isUpgradePurchased = PlayerInventory.Instance.IsCustomerMaxQuantityUpgradePurchased();

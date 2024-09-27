@@ -8,6 +8,8 @@ TagManager:
   - Ingredients
   - Burrito
   - Pizza
+  - ExitPoint
+  - Doughnut
   layers:
   - Default
   - TransparentFX
