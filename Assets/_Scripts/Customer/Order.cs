@@ -70,17 +70,14 @@ public class Order
     }
     public bool ValidateOrder(List<DishData> servedDishes)
     {
-        Dictionary<DishData, int> remainingQuantities = new Dictionary<DishData, int>();
-        for (int i = 0; i < orderedDishes.Count; i++)
-        {
-            remainingQuantities[orderedDishes[i]] = dishQuantities[i];
-        }
+        List<int> remainingQuantities = new List<int>(dishQuantities);
 
         foreach (DishData servedDish in servedDishes)
         {
-            if (remainingQuantities.ContainsKey(servedDish) && remainingQuantities[servedDish] > 0)
+            int index = orderedDishes.IndexOf(servedDish);
+            if (index != -1 && remainingQuantities[index] > 0)
             {
-                remainingQuantities[servedDish]--;
+                remainingQuantities[index]--;
             }
             else
             {
@@ -88,12 +85,18 @@ public class Order
             }
         }
 
-        return remainingQuantities.Values.All(quantity => quantity == 0);
+        return remainingQuantities.All(quantity => quantity == 0);
     }
-    public bool IsOrderComplete()
-    {
-        return orderedDishes.Count == 0 && dishQuantities.Sum() == 0;
-    }
+
+public bool IsOrderComplete()
+{
+    return dishQuantities.All(quantity => quantity == 0);
+}
+
+    //public bool IsOrderComplete()
+    //{
+    //    return orderedDishes.Count == 0 && dishQuantities.Sum() == 0;
+    //}
     // public bool ValidateOrder(DishData servedDish)
     // {
     //     foreach (var dish in orderedDishes)
