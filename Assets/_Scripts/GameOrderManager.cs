@@ -24,7 +24,8 @@ public class GameOrderManager : MonoBehaviour
 
     private Order GenerateCustomerOrder()
     {
-        Order order = new Order();
+        //Order order = new Order();
+        Order order = new Order(DishesManager.Instance, PlayerInventory.Instance);
         Debug.Log("New Order object created.");
 
         // Check if the upgrade has been purchased

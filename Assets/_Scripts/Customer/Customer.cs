@@ -28,7 +28,9 @@ public class Customer : MonoBehaviour
         exitPoint = GameObject.FindGameObjectWithTag("ExitPoint").transform;
         DishesManager dishesManager = FindObjectOfType<DishesManager>();
         playerInventory = FindObjectOfType<PlayerInventory>(); // Get player inventory
-        currentOrder = new Order(dishesManager, playerInventory); // Generate order based on inventory
+
+        // HERE IS NULL!! (NOT THE ISSUE)
+        currentOrder = new Order(dishesManager, playerInventory); // Generate order based on inventory 
         DisplayOrder();
     }
     private void Start()
@@ -126,22 +128,60 @@ public class Customer : MonoBehaviour
     //        RejectOrder(servedDish.gameObject);
     //    }
     //}
-   public virtual void JudgeOrder(Dish servedDish)
+    // public virtual void JudgeOrder(Dish servedDish)
+    // {
+    //     if (servedDish == null || servedDish.dishData == null)
+    //     {
+    //         Debug.LogError("Served dish or its dish data is null.");
+    //         return;
+    //     }
+    //     List<DishData> servedDishes = new List<DishData> { servedDish.dishData };
+
+    //     if (currentOrder.ValidateOrder(servedDishes))
+    //     {
+    //         // Update order display
+    //         UpdateOrderDisplay(servedDish.dishData);
+
+    //         // Spawn a coin and destroy the served dish
+    //         SpawnCoin(servedDish.dishData.price);
+    //         Destroy(servedDish.gameObject);
+
+    //         // Check if all dishes are served
+    //         if (currentOrder.IsOrderComplete())
+    //         {
+    //             isOrderServed = true;
+    //             MoveTowardsExit();
+    //             FindObjectOfType<CustomerPool>().CustomerLeftSeat(transform);
+    //         }
+    //     }
+    //     else
+    //     {
+    //         RejectOrder(servedDish.gameObject);
+    //     }
+    // }
+    public virtual void JudgeOrder(Dish servedDish)
     {
-        List<DishData> servedDishes = new List<DishData> { servedDish.dishData };
-        if (currentOrder.ValidateOrder(servedDishes))
+        if (servedDish == null || servedDish.dishData == null)
         {
-            // Update order display
+            Debug.LogError("Served dish or its dish data is null.");
+            return;
+        }
+
+        int index = currentOrder.orderedDishes.IndexOf(servedDish.dishData);
+        if (index != -1 && currentOrder.dishQuantities[index] > 0)
+        {
+            // Correct dish served
+            currentOrder.dishQuantities[index]--;
             UpdateOrderDisplay(servedDish.dishData);
-
-            // Spawn a coin and destroy the served dish
-            SpawnCoin(servedDish.dishData.price);
             Destroy(servedDish.gameObject);
+            Debug.Log($"Dish served: {servedDish.dishData.dishName}, Remaining: {currentOrder.dishQuantities[index]}");
 
-            // Check if all dishes are served
             if (currentOrder.IsOrderComplete())
             {
+                Debug.Log("Service complete");
                 isOrderServed = true;
+                //SpawnCoin(servedDish.dishData.price);
+                SpawnCoin(CalculateTotalOrderPrice());
                 MoveTowardsExit();
                 FindObjectOfType<CustomerPool>().CustomerLeftSeat(transform);
             }
@@ -151,6 +191,15 @@ public class Customer : MonoBehaviour
             RejectOrder(servedDish.gameObject);
         }
     }
+    private float CalculateTotalOrderPrice()
+{
+    float totalPrice = 0f;
+    for (int i = 0; i < currentOrder.orderedDishes.Count; i++)
+    {
+        totalPrice += currentOrder.orderedDishes[i].price * currentOrder.dishQuantities[i];
+    }
+    return totalPrice;
+}
     private void UpdateOrderDisplay(DishData servedDish)
     {
         int index = currentOrder.orderedDishes.IndexOf(servedDish);

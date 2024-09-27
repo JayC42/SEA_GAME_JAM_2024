@@ -7,22 +7,22 @@ public class Order
     public List<int> dishQuantities; // the quantity of each dish ordered
     public List<List<string>> requiredIngredientsForEachDish; // Ingredients for each dish
     public DishData dish;
-    public Order()
-    {
-        orderedDishes = new List<DishData>();
-        dishQuantities = new List<int>();
-    }
+    //public Order()
+    //{
+    //    orderedDishes = new List<DishData>();
+    //    dishQuantities = new List<int>();
+    //}
     // Add a dish and its quantity to the order
     public void AddDish(string dishName, int quantity)
     {
         if (quantity > 0)
         {
             DishData dish = DishesManager.Instance.GetDishByName(dishName);
-            // for (int i = 0; i < quantity; i++)
-            // {
-            //     orderedDishes.Add(dish);
-            // }
-            orderedDishes.Add(dish);
+            for (int i = 0; i < quantity; i++)
+            {
+                orderedDishes.Add(dish);
+            }
+            //orderedDishes.Add(dish);
             dishQuantities.Add(quantity);
         }
     }
@@ -31,15 +31,22 @@ public class Order
         int dishCount = DetermineDishCount(playerInventory); // Determine dish count based on purchased upgrades
         orderedDishes = new List<DishData>(dishCount);
         requiredIngredientsForEachDish = new List<List<string>>(dishCount);
+        dishQuantities = new List<int>(dishCount); // Initialize dishQuantities list
 
         for (int i = 0; i < dishCount; i++)
         {
             DishData dish = dishesManager.GetRandomDish();
             orderedDishes.Add(dish);
             requiredIngredientsForEachDish.Add(GenerateOrderIngredients(dish));
+            int quantity = GetDishQuantity(dish); // Get the quantity of the dish
+            dishQuantities.Add(quantity); // Add the quantity to the dishQuantities list
         }
     }
-    
+    public int GetDishQuantity(DishData dish)
+    {
+        // For now, just return a random quantity between 1 and 3
+        return Random.Range(1, 4);
+    }
     private int DetermineDishCount(PlayerInventory playerInventory)
     {
         // Get the maximum number of dishes based on purchased upgrades
@@ -110,9 +117,9 @@ public bool IsOrderComplete()
     // }
 
     // Method to get quantity of a specific dish
-    public int GetDishQuantity(DishData dish)
-    {
-        // Example implementation; adjust according to your order structure
-        return orderedDishes.Count(d => d == dish); // Count occurrences of the dish
-    }
+    //public int GetDishQuantity(DishData dish)
+    //{
+    //    // Example implementation; adjust according to your order structure
+    //    return orderedDishes.Count(d => d == dish); // Count occurrences of the dish
+    //}
 }
