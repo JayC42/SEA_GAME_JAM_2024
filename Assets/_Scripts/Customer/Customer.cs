@@ -59,106 +59,6 @@ public class Customer : MonoBehaviour
             JudgeOrder(servedDish);
         }
     }
-
-    //public virtual void JudgeOrder(Dish servedDish)
-    //{
-    //    if (currentOrder.dish == servedDish.dishData)
-    //    {
-    //        HideDishImages();
-    //        smileyImage.SetActive(true);
-    //        sadImage.SetActive(false);
-    //        isOrderServed = true;
-
-    //        // Spawn a coin GameObject and set its value
-    //        SpawnCoin(currentOrder.dish.price);
-
-    //        // Destroy the served dish object
-    //        Destroy(servedDish.gameObject);
-    //    }
-    //    else
-    //    {
-    //        RejectOrder(servedDish.gameObject);
-    //    }
-    //}
-    //public virtual void JudgeOrder(Dish servedDish)
-    //{
-    //    // Check if the served dish matches any dish in the customer's order
-    //    bool dishFound = false;
-    //    foreach (DishData dish in currentOrder.orderedDishes)
-    //    {
-    //        if (dish == servedDish.dishData)
-    //        {
-    //            dishFound = true;
-    //            break;
-    //        }
-    //    }
-
-    //    if (dishFound)
-    //    {
-    //        // Hide all dish images after successful dish serving
-    //        HideDishImages();
-
-    //        smileyImage.SetActive(true);
-    //        sadImage.SetActive(false);
-    //        isOrderServed = true;
-
-    //        // Spawn a coin GameObject and set its value
-    //        SpawnCoin(servedDish.dishData.price);
-
-    //        // Remove the dish from the ordered dishes list
-    //        currentOrder.orderedDishes.Remove(servedDish.dishData);
-
-    //        // Destroy the served dish object
-    //        Destroy(servedDish.gameObject);
-
-    //        // Check if all dishes have been served
-    //        if (currentOrder.orderedDishes.Count == 0)
-    //        {
-    //            isOrderServed = true;
-    //            // Move the customer towards the exit
-    //            MoveTowardsExit();
-    //            // When the customer's order is fulfilled, call the CustomerLeftSeat method
-    //            CustomerPool customerPool = FindObjectOfType<CustomerPool>();
-    //            customerPool.CustomerLeftSeat(transform);
-    //        }
-    //    }
-    //    else
-    //    {
-    //        // Reject the order, make the food bounce back
-    //        RejectOrder(servedDish.gameObject);
-    //    }
-    //}
-    // public virtual void JudgeOrder(Dish servedDish)
-    // {
-    //     if (servedDish == null || servedDish.dishData == null)
-    //     {
-    //         Debug.LogError("Served dish or its dish data is null.");
-    //         return;
-    //     }
-    //     List<DishData> servedDishes = new List<DishData> { servedDish.dishData };
-
-    //     if (currentOrder.ValidateOrder(servedDishes))
-    //     {
-    //         // Update order display
-    //         UpdateOrderDisplay(servedDish.dishData);
-
-    //         // Spawn a coin and destroy the served dish
-    //         SpawnCoin(servedDish.dishData.price);
-    //         Destroy(servedDish.gameObject);
-
-    //         // Check if all dishes are served
-    //         if (currentOrder.IsOrderComplete())
-    //         {
-    //             isOrderServed = true;
-    //             MoveTowardsExit();
-    //             FindObjectOfType<CustomerPool>().CustomerLeftSeat(transform);
-    //         }
-    //     }
-    //     else
-    //     {
-    //         RejectOrder(servedDish.gameObject);
-    //     }
-    // }
     public virtual void JudgeOrder(Dish servedDish)
     {
         if (servedDish == null || servedDish.dishData == null)
@@ -172,16 +72,29 @@ public class Customer : MonoBehaviour
         {
             // Correct dish served
             currentOrder.dishQuantities[index]--;
-            UpdateOrderDisplay(servedDish.dishData);
             Destroy(servedDish.gameObject);
             Debug.Log($"Dish served: {servedDish.dishData.dishName}, Remaining: {currentOrder.dishQuantities[index]}");
+            UpdateOrderDisplay(servedDish.dishData);
 
-            if (currentOrder.IsOrderComplete())
+            print("Revenue = " + CalculateTotalOrderPrice());
+
+            // Check if all dishes have been served
+            bool isOrderComplete = true;
+            foreach (int quantity in currentOrder.dishQuantities)
+            {
+                if (quantity > 0)
+                {
+                    isOrderComplete = false;
+                    break;
+                }
+            }
+
+            if (isOrderComplete)
             {
                 Debug.Log("Service complete");
                 isOrderServed = true;
-                //SpawnCoin(servedDish.dishData.price);
                 SpawnCoin(CalculateTotalOrderPrice());
+                print("Money = " + CalculateTotalOrderPrice());
                 MoveTowardsExit();
                 FindObjectOfType<CustomerPool>().CustomerLeftSeat(transform);
             }
@@ -192,27 +105,63 @@ public class Customer : MonoBehaviour
         }
     }
     private float CalculateTotalOrderPrice()
-{
-    float totalPrice = 0f;
-    for (int i = 0; i < currentOrder.orderedDishes.Count; i++)
     {
-        totalPrice += currentOrder.orderedDishes[i].price * currentOrder.dishQuantities[i];
+        float totalPrice = 0f;
+        for (int i = 0; i < currentOrder.orderedDishes.Count; i++)
+        {
+            totalPrice += currentOrder.orderedDishes[i].price * currentOrder.dishQuantities[i];
+        }
+        return totalPrice;
     }
-    return totalPrice;
-}
     private void UpdateOrderDisplay(DishData servedDish)
     {
-        int index = currentOrder.orderedDishes.IndexOf(servedDish);
-        if (index != -1)
-        {
-            currentOrder.dishQuantities[index]--;
-            if (currentOrder.dishQuantities[index] == 0)
+            int index = currentOrder.orderedDishes.IndexOf(servedDish);
+            if (index != -1)
             {
-                currentOrder.orderedDishes.RemoveAt(index);
-                currentOrder.dishQuantities.RemoveAt(index);
+                currentOrder.dishQuantities[index]--;
+                if (currentOrder.dishQuantities[index] == 0)
+                {
+                    currentOrder.orderedDishes.RemoveAt(index);
+                    currentOrder.dishQuantities.RemoveAt(index);
+                }
             }
-        }
-        DisplayOrder(); // Refresh the order display
+   
+            // Update the text directly
+            Dictionary<string, int> dishCounts = new Dictionary<string, int>();
+            foreach (DishData dish in currentOrder.orderedDishes)
+            {
+                if (!dishCounts.ContainsKey(dish.dishName))
+                    dishCounts[dish.dishName] = 0;
+                dishCounts[dish.dishName]++;
+            }
+
+            if (dishCounts.ContainsKey("burrito"))
+            {
+                burritoText.text = "x " + dishCounts["burrito"];
+            }
+            else
+            {
+                burritoText.text = "";
+            }
+
+            if (dishCounts.ContainsKey("pizza"))
+            {
+                pizzaText.text = "x " + dishCounts["pizza"];
+            }
+            else
+            {
+                pizzaText.text = "";
+            }
+
+            if (dishCounts.ContainsKey("doughnut"))
+            {
+                doughnutText.text = "x " + dishCounts["doughnut"];
+            }
+            else
+            {
+                doughnutText.text = "";
+            }
+     
     }
 
     private void SpawnCoin(float value)
@@ -335,4 +284,103 @@ public class Customer : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    //public virtual void JudgeOrder(Dish servedDish)
+    //{
+    //    if (currentOrder.dish == servedDish.dishData)
+    //    {
+    //        HideDishImages();
+    //        smileyImage.SetActive(true);
+    //        sadImage.SetActive(false);
+    //        isOrderServed = true;
+
+    //        // Spawn a coin GameObject and set its value
+    //        SpawnCoin(currentOrder.dish.price);
+
+    //        // Destroy the served dish object
+    //        Destroy(servedDish.gameObject);
+    //    }
+    //    else
+    //    {
+    //        RejectOrder(servedDish.gameObject);
+    //    }
+    //}
+    //public virtual void JudgeOrder(Dish servedDish)
+    //{
+    //    // Check if the served dish matches any dish in the customer's order
+    //    bool dishFound = false;
+    //    foreach (DishData dish in currentOrder.orderedDishes)
+    //    {
+    //        if (dish == servedDish.dishData)
+    //        {
+    //            dishFound = true;
+    //            break;
+    //        }
+    //    }
+
+    //    if (dishFound)
+    //    {
+    //        // Hide all dish images after successful dish serving
+    //        HideDishImages();
+
+    //        smileyImage.SetActive(true);
+    //        sadImage.SetActive(false);
+    //        isOrderServed = true;
+
+    //        // Spawn a coin GameObject and set its value
+    //        SpawnCoin(servedDish.dishData.price);
+
+    //        // Remove the dish from the ordered dishes list
+    //        currentOrder.orderedDishes.Remove(servedDish.dishData);
+
+    //        // Destroy the served dish object
+    //        Destroy(servedDish.gameObject);
+
+    //        // Check if all dishes have been served
+    //        if (currentOrder.orderedDishes.Count == 0)
+    //        {
+    //            isOrderServed = true;
+    //            // Move the customer towards the exit
+    //            MoveTowardsExit();
+    //            // When the customer's order is fulfilled, call the CustomerLeftSeat method
+    //            CustomerPool customerPool = FindObjectOfType<CustomerPool>();
+    //            customerPool.CustomerLeftSeat(transform);
+    //        }
+    //    }
+    //    else
+    //    {
+    //        // Reject the order, make the food bounce back
+    //        RejectOrder(servedDish.gameObject);
+    //    }
+    //}
+    // public virtual void JudgeOrder(Dish servedDish)
+    // {
+    //     if (servedDish == null || servedDish.dishData == null)
+    //     {
+    //         Debug.LogError("Served dish or its dish data is null.");
+    //         return;
+    //     }
+    //     List<DishData> servedDishes = new List<DishData> { servedDish.dishData };
+
+    //     if (currentOrder.ValidateOrder(servedDishes))
+    //     {
+    //         // Update order display
+    //         UpdateOrderDisplay(servedDish.dishData);
+
+    //         // Spawn a coin and destroy the served dish
+    //         SpawnCoin(servedDish.dishData.price);
+    //         Destroy(servedDish.gameObject);
+
+    //         // Check if all dishes are served
+    //         if (currentOrder.IsOrderComplete())
+    //         {
+    //             isOrderServed = true;
+    //             MoveTowardsExit();
+    //             FindObjectOfType<CustomerPool>().CustomerLeftSeat(transform);
+    //         }
+    //     }
+    //     else
+    //     {
+    //         RejectOrder(servedDish.gameObject);
+    //     }
+    // }
 }
