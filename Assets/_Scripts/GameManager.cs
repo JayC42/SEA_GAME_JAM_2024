@@ -1,12 +1,18 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; } // Singleton instance
+    public int currentDay = 1;
     public int currentLevel = 1;
-    public float gameTime = 300f; // Initial time per level
-    private CustomerPool customerPool;
+    public float gameTime = 30f; // Initial time per level
+    public CustomerPool customerPool;
+    public int interval = 5; 
+    public bool game_running = false;
+    public GameOrderManager gameOrderManager;
+    public UIManager timer;
 
     private void Awake()
     {
@@ -21,16 +27,35 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private IEnumerator InitializeCustomerRoutine()
+    {
+        while (game_running) // Loop only while the game is running
+        {
+            customerPool.SpawnCustomer(); // Call the method
+            Debug.Log("Spawn Customer called");
+            yield return new WaitForSeconds(interval); // Wait for 'interval' seconds
+        }
+    }
+
+    void StopInitializeCustomer()
+    {
+        StopCoroutine(InitializeCustomerRoutine()); // Stops the coroutine
+        Debug.Log("routine stopped");
+        currentDay += 1;
+    }
     void Start()
     {
         //customerPool = GetComponent<CustomerPool>(); // Assumes CustomerPool is attached to the same GameObject
         //StartGame();
+        StartCoroutine(InitializeCustomerRoutine());
     }
 
-    void StartGame()
+    public void StartGame()
     {
-        InitializeCustomerPool();
-        InvokeRepeating("SpawnCustomer", 2f, customerPool.GetSpawnRate(currentLevel));
+        game_running = true;
+        timer.timerIsRunning = true;
+        timer.resetTimer();
+        InitializeCustomerRoutine();
     }
 
     void InitializeCustomerPool()
@@ -57,8 +82,8 @@ public class GameManager : MonoBehaviour
         customerPool.InitializePool(totalCustomers);
     }
 
-    void SpawnCustomer()
-    {
-        customerPool.SpawnCustomer();
-    }
+    // void SpawnCustomer()
+    // {
+    //     customerPool.SpawnCustomer();
+    // }
 }

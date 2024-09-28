@@ -2410,10 +2410,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4506670fed7161b41afb14c74ffa1e24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameManager: {fileID: 1701359199}
   moneyTxt: {fileID: 1795454835}
+  timeTxt: {fileID: 1578269323}
   money: 0
   reputation: 10
   gameTime: 30
+  timeRemaining: 30
+  timerIsRunning: 0
 --- !u!4 &780670176
 Transform:
   m_ObjectHideFlags: 0
@@ -5157,11 +5161,18 @@ Transform:
   m_GameObject: {fileID: 1591622229}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.0842829, y: -7.8501377, z: 0}
+  m_LocalPosition: {x: 0, y: -11.929425, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 852441109}
+  m_Children:
+  - {fileID: 330310087}
+  - {fileID: 1790800314}
+  - {fileID: 776362441}
+  - {fileID: 1509279320}
+  - {fileID: 1804946945}
+  - {fileID: 260841898}
+  - {fileID: 2140193459}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1609443779
 PrefabInstance:
@@ -5257,6 +5268,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   customerPrefab: {fileID: 4568496775441559514, guid: 0963b499e7cf35a4aa93a3ae5abebbda, type: 3}
+  ACustomerPrefab: {fileID: 8304979609082193368, guid: fdd0032109123894aa12b0e51c864bbe, type: 3}
   entrance: {fileID: 189292514}
   seats:
   - {fileID: 749514818}
@@ -5267,6 +5279,8 @@ MonoBehaviour:
   easySpawnRate: 10
   mediumSpawnRate: 7
   hardSpawnRate: 5
+  gameOrderManager: {fileID: 1701359197}
+  gameManager: {fileID: 1701359199}
   isSeatOccupied: 
 --- !u!114 &1701359197
 MonoBehaviour:
@@ -5311,8 +5325,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d841c8fe0c8655b46bf9314ecb92f9cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentDay: 1
   currentLevel: 1
   gameTime: 300
+  customerPool: {fileID: 1701359196}
+  interval: 5
+  game_running: 0
+  gameOrderManager: {fileID: 1701359197}
+  timer: {fileID: 780670175}
 --- !u!4 &1701359200
 Transform:
   m_ObjectHideFlags: 0
@@ -7317,4 +7337,14 @@ SceneRoots:
   - {fileID: 1082934262}
   - {fileID: 226993915}
   - {fileID: 1979628814}
+  - {fileID: 192195880}
+  - {fileID: 914952967}
+  - {fileID: 173439227}
+  - {fileID: 1591622230}
+  - {fileID: 836056513}
+  - {fileID: 950809541}
+  - {fileID: 1204908889}
+  - {fileID: 429831094}
+  - {fileID: 865161951}
+  - {fileID: 163009399}
   - {fileID: 914952967}
