@@ -23,16 +23,18 @@ public class Customer : MonoBehaviour
     public Transform exitPoint; // The exit point where the customer will leave
     public GameObject coinPrefab;
     public bool isOrderServed = false;
+    public bool stopFilling = false;
     // for patience bar
     public Image fillImage; //UI image type: Filled
     public Image fillImageBg; //UI image type: Filled
     public float fillDuration = 5f;
     private float currentFillAmount = 0f;
-    private bool leaving = false;
+    protected bool leaving = false;
     private bool timer_start = false;
     public int seatNumber;
+    // public float pauseTime = 5f;
 
-    private void Awake()
+    protected void Awake()
     {
         exitPoint = GameObject.FindGameObjectWithTag("ExitPoint").transform;
         DishesManager dishesManager = FindObjectOfType<DishesManager>();
@@ -43,11 +45,11 @@ public class Customer : MonoBehaviour
         currentOrder.orderPrice = CalculateTotalOrderPrice();
         DisplayOrder();
     }
-    private void Start()
+    protected void Start()
     {
     }
 
-    private void Update()
+    protected void Update()
     {
         if (!isOrderServed)
         {
@@ -60,9 +62,10 @@ public class Customer : MonoBehaviour
                     fillImage.fillAmount = currentFillAmount;
                 }
                 // Check if the bar is fully filled
-                if (currentFillAmount >= 1f)
+                if (currentFillAmount >= 1f && stopFilling == false)
                 {
                     //actions here //eg: customer angry run away
+                    stopFilling = true;
                     HideOrder();
                     MoveTowardsExit();
                     isOrderServed = true;
@@ -76,7 +79,7 @@ public class Customer : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    public virtual void OnTriggerEnter2D(Collider2D other)
     {
         Dish servedDish = other.GetComponent<Dish>();
 
@@ -98,11 +101,6 @@ public class Customer : MonoBehaviour
         {
             // Correct dish served
             currentOrder.orderedDishes.Remove(currentOrder.orderedDishes[index]);
-            // foreach (int thing in currentOrder.dishQuantities)
-            // {
-            //     Debug.Log(thing);
-            // }
-            // currentOrder.dishQuantities[index]--;
             Destroy(servedDish.gameObject);
             // Debug.Log($"Dish served: {servedDish.dishData.dishName}, Remaining: {currentOrder.dishQuantities[index]}");
             UpdateOrderDisplay(servedDish.dishData);
@@ -111,21 +109,12 @@ public class Customer : MonoBehaviour
 
             // Check if all dishes have been served
             bool isOrderComplete = true;
-            // foreach (int quantity in currentOrder.dishQuantities)
-            // {
-            //     if (quantity > 0)
-            //     {
-            //         isOrderComplete = false;
-            //         break;
-            //     }
-            // }
             if (currentOrder.orderedDishes.Count > 0)
                 isOrderComplete = false;
 
-
             if (isOrderComplete)
             {
-                Debug.Log("Service complete");
+                stopFilling = true;
                 isOrderServed = true;
                 HideOrder();
                 SpawnCoin(currentOrder.orderPrice);
@@ -136,11 +125,11 @@ public class Customer : MonoBehaviour
         }
         else
         {
-            Debug.Log($"Rejecting Order | index: {index} | dish quan: {currentOrder.dishQuantities[index]}");
+            Debug.Log($"Rejecting Order");
             RejectOrder(servedDish.gameObject);
         }
     }
-    void HideOrder()
+    protected void HideOrder()
     {
         orderImage.SetActive(false);
         dishImage1.SetActive(false);
@@ -152,24 +141,20 @@ public class Customer : MonoBehaviour
         fillImage.enabled = false;
         fillImageBg.enabled = false;
     }
-    private float CalculateTotalOrderPrice()
+    protected float CalculateTotalOrderPrice()
     {
         float totalPrice = 0f;
         for (int i = 0; i < currentOrder.orderedDishes.Count; i++)
         {
-            // Debug.Log("item price is: " + currentOrder.orderedDishes[i].price + " | dish quantity is: " + currentOrder.dishQuantities[i]);
-            // totalPrice += currentOrder.orderedDishes[i].price * currentOrder.dishQuantities[i];
             totalPrice += currentOrder.orderedDishes[i].price;
         }
         return totalPrice;
     }
-    private void UpdateOrderDisplay(DishData servedDish)
+    protected void UpdateOrderDisplay(DishData servedDish)
     {
             int index = currentOrder.orderedDishes.IndexOf(servedDish);
             if (index != -1)
             {
-                // currentOrder.dishQuantities[index]--;
-                Debug.Log($"dish quant: {currentOrder.dishQuantities[index]}");
                 if (currentOrder.dishQuantities[index] == 0)
                 {
                     currentOrder.orderedDishes.RemoveAt(index);
@@ -215,7 +200,7 @@ public class Customer : MonoBehaviour
      
     }
 
-    private void SpawnCoin(float value)
+    protected void SpawnCoin(float value)
     {
         GameObject coin = Instantiate(coinPrefab, transform.position, Quaternion.identity);
 
@@ -229,7 +214,7 @@ public class Customer : MonoBehaviour
             Debug.LogError("Coin prefab does not have a Coin component.");
         }
     }
-    private void DisplayOrder()
+    protected void DisplayOrder()
     {
         HideDishImages();
         burritoText.text = ""; 
@@ -276,13 +261,7 @@ public class Customer : MonoBehaviour
         dishImage3.SetActive(false);
     }
 
-    private void PayForOrder(float orderPrice)
-    {
-        int payment = UIManager.Instance.money += (int)orderPrice;
-        UIManager.Instance.moneyTxt.text = "Money: $" + payment;
-    }
-
-    public virtual void RejectOrder(GameObject servedDish)
+    protected virtual void RejectOrder(GameObject servedDish)
     {
         Dish dish = servedDish.GetComponent<Dish>();
 
@@ -308,7 +287,7 @@ public class Customer : MonoBehaviour
         StartCoroutine(MoveToSeatCoroutine(seat));
     }
 
-    private IEnumerator MoveToSeatCoroutine(Transform seat)
+    protected IEnumerator MoveToSeatCoroutine(Transform seat)
     {
         float speed = 2f; // Adjust the speed as needed
 
@@ -327,7 +306,7 @@ public class Customer : MonoBehaviour
     }
 
 
-    private void MoveTowardsExit()
+    protected void MoveTowardsExit()
     {
         leaving = true;
         transform.position = Vector3.MoveTowards(transform.position, exitPoint.position, Time.deltaTime * 2f);
@@ -337,104 +316,4 @@ public class Customer : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
-    //public virtual void JudgeOrder(Dish servedDish)
-    //{
-    //    if (currentOrder.dish == servedDish.dishData)
-    //    {
-    //        HideDishImages();
-    //        smileyImage.SetActive(true);
-    //        sadImage.SetActive(false);
-    //        isOrderServed = true;
-
-    //        // Spawn a coin GameObject and set its value
-    //        SpawnCoin(currentOrder.dish.price);
-
-    //        // Destroy the served dish object
-    //        Destroy(servedDish.gameObject);
-    //    }
-    //    else
-    //    {
-    //        RejectOrder(servedDish.gameObject);
-    //    }
-    //}
-    //public virtual void JudgeOrder(Dish servedDish)
-    //{
-    //    // Check if the served dish matches any dish in the customer's order
-    //    bool dishFound = false;
-    //    foreach (DishData dish in currentOrder.orderedDishes)
-    //    {
-    //        if (dish == servedDish.dishData)
-    //        {
-    //            dishFound = true;
-    //            break;
-    //        }
-    //    }
-
-    //    if (dishFound)
-    //    {
-    //        // Hide all dish images after successful dish serving
-    //        HideDishImages();
-
-    //        smileyImage.SetActive(true);
-    //        sadImage.SetActive(false);
-    //        isOrderServed = true;
-
-    //        // Spawn a coin GameObject and set its value
-    //        SpawnCoin(servedDish.dishData.price);
-
-    //        // Remove the dish from the ordered dishes list
-    //        currentOrder.orderedDishes.Remove(servedDish.dishData);
-
-    //        // Destroy the served dish object
-    //        Destroy(servedDish.gameObject);
-
-    //        // Check if all dishes have been served
-    //        if (currentOrder.orderedDishes.Count == 0)
-    //        {
-    //            isOrderServed = true;
-    //            // Move the customer towards the exit
-    //            MoveTowardsExit();
-    //            // When the customer's order is fulfilled, call the CustomerLeftSeat method
-    //            CustomerPool customerPool = FindObjectOfType<CustomerPool>();
-    //            customerPool.CustomerLeftSeat(transform);
-    //        }
-    //    }
-    //    else
-    //    {
-    //        // Reject the order, make the food bounce back
-    //        RejectOrder(servedDish.gameObject);
-    //    }
-    //}
-    // public virtual void JudgeOrder(Dish servedDish)
-    // {
-    //     if (servedDish == null || servedDish.dishData == null)
-    //     {
-    //         Debug.LogError("Served dish or its dish data is null.");
-    //         return;
-    //     }
-    //     List<DishData> servedDishes = new List<DishData> { servedDish.dishData };
-
-    //     if (currentOrder.ValidateOrder(servedDishes))
-    //     {
-    //         // Update order display
-    //         UpdateOrderDisplay(servedDish.dishData);
-
-    //         // Spawn a coin and destroy the served dish
-    //         SpawnCoin(servedDish.dishData.price);
-    //         Destroy(servedDish.gameObject);
-
-    //         // Check if all dishes are served
-    //         if (currentOrder.IsOrderComplete())
-    //         {
-    //             isOrderServed = true;
-    //             MoveTowardsExit();
-    //             FindObjectOfType<CustomerPool>().CustomerLeftSeat(transform);
-    //         }
-    //     }
-    //     else
-    //     {
-    //         RejectOrder(servedDish.gameObject);
-    //     }
-    // }
 }

@@ -6,6 +6,7 @@ public class CustomerPool : MonoBehaviour
 {
     [Header("Customer Settings")]
     public GameObject customerPrefab;
+    public GameObject ACustomerPrefab;
     public Transform entrance; // The entrance where customers will spawn
     public List<Transform> seats = new List<Transform>(); // The seats in the game
 
@@ -63,9 +64,19 @@ public class CustomerPool : MonoBehaviour
         totalCustomers = maxPoolSize; // Ensure it doesn't exceed max size
         for (int i = 0; i < totalCustomers; i++)
         {
-            GameObject customer = Instantiate(customerPrefab);
-            customer.SetActive(false);
-            pool.Add(customer);
+            // if (Random.Range(1, 6) != 1)
+            // {
+                GameObject customer = Instantiate(customerPrefab);
+                customer.SetActive(false);
+                pool.Add(customer);
+            // }
+            // else
+            // {
+                // Debug.Log("WEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+                // GameObject customer = Instantiate(ACustomerPrefab);
+                // customer.SetActive(false);
+                // pool.Add(customer);
+            // }
         }
 
         // Generate orders for the customers
@@ -77,7 +88,6 @@ public class CustomerPool : MonoBehaviour
         // Check if there are available seats
         // if (currentSeatIndex < seats.Count && !isSeatOccupied[currentSeatIndex])
         // {
-            Debug.Log("customers in pool: " + pool.Count);
             foreach (GameObject customer in pool)
             {
                 if (customer && !customer.activeInHierarchy)
@@ -93,7 +103,6 @@ public class CustomerPool : MonoBehaviour
                             customer.GetComponent<Customer>().EnterRestaurant(entrance);
                             customer.GetComponent<Customer>().MoveToSeat(seats[i]); // Move to the available seat
                             isSeatOccupied[i] = true;
-                            Debug.Log("enetered seat: " + i);
                             customer.GetComponent<Customer>().seatNumber = i; // Mark this seat as occupied
                             currentSeatIndex = i; // Set the current seat index to the seat the customer moved to
                             return ; // Exit the loop once the customer has been seated

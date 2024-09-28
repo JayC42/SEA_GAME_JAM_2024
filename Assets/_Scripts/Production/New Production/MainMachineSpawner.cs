@@ -33,6 +33,7 @@ public class MainMachineSpawner : MonoBehaviour, IPointerDownHandler, IPointerUp
     {
         if (isHolding)
         {
+            Debug.Log("Holding: " + currentFillAmount);
             currentFillAmount += Time.deltaTime / fillDuration;
             if (fillImage != null)
             {

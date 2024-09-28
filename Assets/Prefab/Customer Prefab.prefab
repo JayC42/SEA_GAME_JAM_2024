@@ -904,6 +904,7 @@ MonoBehaviour:
   fillImage: {fileID: 5711019045665674109}
   fillImageBg: {fileID: 8533738900219045850}
   fillDuration: 10
+  seatNumber: 0
 --- !u!61 &6129836078969642238
 BoxCollider2D:
   m_ObjectHideFlags: 0
