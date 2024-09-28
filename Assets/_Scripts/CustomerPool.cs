@@ -101,6 +101,7 @@ public class CustomerPool : MonoBehaviour
                         {
                             customer.SetActive(true);
                             customer.GetComponent<Customer>().EnterRestaurant(entrance);
+                            customer.GetComponent<Customer>().gameManager = gameManager;
                             customer.GetComponent<Customer>().MoveToSeat(seats[i]); // Move to the available seat
                             isSeatOccupied[i] = true;
                             customer.GetComponent<Customer>().seatNumber = i; // Mark this seat as occupied

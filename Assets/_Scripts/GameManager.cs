@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; } // Singleton instance
     public int currentDay = 1;
     public int currentLevel = 1;
-    public float gameTime = 30f; // Initial time per level
+    public float gameTime = 300f; // Initial time per level
     public CustomerPool customerPool;
     public int interval = 5; 
     public bool game_running = false;
@@ -82,6 +82,9 @@ public class GameManager : MonoBehaviour
         customerPool.InitializePool(totalCustomers);
     }
 
+    public int sunlightQuantity;
+    public int windQuantity;
+    public int airQuantity;
     // void SpawnCustomer()
     // {
     //     customerPool.SpawnCustomer();

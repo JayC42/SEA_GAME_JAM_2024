@@ -268,7 +268,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fillImage: {fileID: 1705554494261081233}
   fillDuration: 3
-  itemPrefab: {fileID: 1993487074315676454, guid: 02a90b51449db29489bd88b70cbdf3ca, type: 3}
+  itemPrefab: {fileID: 659641973890358207, guid: f2260fc5afb36db408f845bbed1b8601, type: 3}
   itemHolders:
   - {fileID: 330310091}
   itemAmount: 1
@@ -1284,9 +1284,9 @@ Transform:
   m_GameObject: {fileID: 330310086}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.4501171, y: -10.669237, z: 0}
-  m_LocalScale: {x: 3, y: 2.7463446, z: 1.7569762}
-  m_ConstrainProportionsScale: 1
+  m_LocalPosition: {x: 1.4501171, y: -0.56, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1591622230}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1399,7 +1399,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4981fc6bbb09dba42b1c1d3e3ee4fb33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  items: []
   max_items: 1
+  gameManager: {fileID: 1701359199}
 --- !u!1001 &403174206
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2257,8 +2259,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -1.8580828, y: 1.9998627, z: 0}
-  m_LocalScale: {x: 5.269294, y: 1.1169384, z: 1.7569762}
-  m_ConstrainProportionsScale: 1
+  m_LocalScale: {x: 5.1, y: 1.1, z: 1.1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1591622230}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2274,7 +2276,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4981fc6bbb09dba42b1c1d3e3ee4fb33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  items: []
   max_items: 3
+  gameManager: {fileID: 1701359199}
 --- !u!61 &776362443
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2953,8 +2957,9 @@ MonoBehaviour:
     isOccupied: 0
     snappedIngredient: {fileID: 0}
   snapRange: 0.5
-  sunlightPrefab: {fileID: 1993487074315676454, guid: 02a90b51449db29489bd88b70cbdf3ca, type: 3}
+  sunlightPrefab: {fileID: 6080780731591500526, guid: 4fe4cb85cf506da498f20ca1488842e0, type: 3}
   batteryAmount: 1
+  gameManager: {fileID: 0}
   sunlightHolders:
   - {fileID: 776362442}
 --- !u!1 &899213809
@@ -4214,7 +4219,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemCAmount: 1
-  itemPrefab: {fileID: 1993487074315676454, guid: 02a90b51449db29489bd88b70cbdf3ca, type: 3}
+  itemPrefab: {fileID: 5651600492201386133, guid: 107bef07a5e6fd74ca02f1120b92a89a, type: 3}
   itemHolders:
   - {fileID: 1790800315}
   clickImages:
@@ -5139,7 +5144,7 @@ Transform:
   m_GameObject: {fileID: 1591622229}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 20.084282, y: -0.75871277, z: 0}
+  m_LocalPosition: {x: 3.83, y: -2.94, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5310,6 +5315,9 @@ MonoBehaviour:
   game_running: 0
   gameOrderManager: {fileID: 1701359197}
   timer: {fileID: 780670175}
+  sunlightQuantity: 0
+  windQuantity: 0
+  airQuantity: 0
 --- !u!4 &1701359200
 Transform:
   m_ObjectHideFlags: 0
@@ -5598,8 +5606,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 2.3957171, y: 1.9898624, z: 0}
-  m_LocalScale: {x: 5.2468824, y: 1.1251774, z: 1.7569762}
-  m_ConstrainProportionsScale: 1
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1591622230}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5615,7 +5623,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4981fc6bbb09dba42b1c1d3e3ee4fb33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  items: []
   max_items: 2
+  gameManager: {fileID: 1701359199}
 --- !u!61 &1790800316
 BoxCollider2D:
   m_ObjectHideFlags: 0

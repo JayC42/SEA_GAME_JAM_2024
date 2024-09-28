@@ -20,6 +20,7 @@ public class SunlightCanSpawner : MonoBehaviour
 
     public GameObject sunlightPrefab; // Reference to the battery prefab
     public int batteryAmount = 1;
+    public GameManager gameManager;
 
     public List<ProperItemHolder> sunlightHolders;
     private List<Draggable> draggableObjects = new List<Draggable>();
@@ -151,7 +152,7 @@ public class SunlightCanSpawner : MonoBehaviour
     {
         foreach (ProperItemHolder holder in holders)
         {
-            if (holder.CanAddItem())
+            if (holder.gameManager.sunlightQuantity < holder.max_items)
             {
                 return holder;
             }

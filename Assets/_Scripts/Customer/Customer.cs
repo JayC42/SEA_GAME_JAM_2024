@@ -32,6 +32,7 @@ public class Customer : MonoBehaviour
     protected bool leaving = false;
     private bool timer_start = false;
     public int seatNumber;
+    public GameManager gameManager;
     // public float pauseTime = 5f;
 
     protected void Awake()
@@ -100,6 +101,13 @@ public class Customer : MonoBehaviour
         if (index != -1 && currentOrder.orderedDishes[index] && !leaving)
         {
             // Correct dish served
+            Debug.Log(currentOrder.orderedDishes[index].dishName);
+            if (currentOrder.orderedDishes[index].dishName == "doughnut")
+                gameManager.airQuantity -= 1;
+            else if (currentOrder.orderedDishes[index].dishName == "burrito")
+                gameManager.windQuantity -= 1;
+            else if (currentOrder.orderedDishes[index].dishName == "pizza")
+                gameManager.sunlightQuantity -= 1;
             currentOrder.orderedDishes.Remove(currentOrder.orderedDishes[index]);
             Destroy(servedDish.gameObject);
             // Debug.Log($"Dish served: {servedDish.dishData.dishName}, Remaining: {currentOrder.dishQuantities[index]}");

@@ -71,7 +71,8 @@ public class InstantMachineSpawner : MonoBehaviour
     {
         foreach (ProperItemHolder holder in holders)
         {
-            if (holder.CanAddItem())
+            Debug.Log("air quantity: " + holder.gameManager.airQuantity);
+            if (holder.gameManager.airQuantity < holder.max_items)
             {
                 return holder;
             }

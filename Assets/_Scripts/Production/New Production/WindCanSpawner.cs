@@ -43,9 +43,11 @@ public class WindCanSpawner : MonoBehaviour
     {
         for (int i = 0; i < amount; i++)
         {
+
             ProperItemHolder availableHolder = FindAvailableHolder(holders);
             if (availableHolder != null)
             {
+                availableHolder.gameManager.windQuantity += 1;
                 GameObject newItem = Instantiate(prefab, availableHolder.transform.position, Quaternion.identity);
                 availableHolder.AddItem(newItem);
 
@@ -97,7 +99,7 @@ public class WindCanSpawner : MonoBehaviour
     {
         foreach (ProperItemHolder holder in holders)
         {
-            if (holder.CanAddItem())
+            if (holder.gameManager.windQuantity < holder.max_items)
             {
                 return holder;
             }
