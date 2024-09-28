@@ -50,13 +50,13 @@ public class MainMachineSpawner : MonoBehaviour, IPointerDownHandler, IPointerUp
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        //Debug.Log("Pointer down detected");
+        Debug.Log("Pointer down detected");
         isHolding = true;
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        //Debug.Log("Pointer up detected");
+        Debug.Log("Pointer up detected");
         isHolding = false;
         ResetFill();
     }
