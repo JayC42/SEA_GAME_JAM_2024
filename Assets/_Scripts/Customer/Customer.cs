@@ -261,7 +261,7 @@ public class Customer : MonoBehaviour
         dishImage3.SetActive(false);
     }
 
-    protected virtual void RejectOrder(GameObject servedDish)
+    public virtual void RejectOrder(GameObject servedDish)
     {
         Dish dish = servedDish.GetComponent<Dish>();
 
