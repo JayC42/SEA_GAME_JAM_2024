@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro; 
 using System.Collections.Generic;
 using System.Collections;
+using UnityEngine.UI;
 
 public class Customer : MonoBehaviour
 {
@@ -22,6 +23,13 @@ public class Customer : MonoBehaviour
     public Transform exitPoint; // The exit point where the customer will leave
     public GameObject coinPrefab;
     public bool isOrderServed = false;
+    // for patience bar
+    public Image fillImage; //UI image type: Filled
+    public Image fillImageBg; //UI image type: Filled
+    public float fillDuration = 3f;
+    private float currentFillAmount = 0f;
+    private bool leaving = false;
+    private bool timer_start = false;
 
     private void Awake()
     {
@@ -42,8 +50,23 @@ public class Customer : MonoBehaviour
     {
         if (!isOrderServed)
         {
-            // Customer continues to wait at their position
-            // Additional logic for customer animations can go here if needed
+            if (timer_start)
+                {
+                currentFillAmount += Time.deltaTime / fillDuration;
+
+                if (fillImage != null)
+                {
+                    fillImage.fillAmount = currentFillAmount;
+                }
+                // Check if the bar is fully filled
+                if (currentFillAmount >= 1f)
+                {
+                    //actions here //eg: customer angry run away
+                    HideOrder();
+                    MoveTowardsExit();
+                    FindObjectOfType<CustomerPool>().CustomerLeftSeat(transform);
+                }
+            }
         }
         else
         {
@@ -69,7 +92,7 @@ public class Customer : MonoBehaviour
         }
 
         int index = currentOrder.orderedDishes.IndexOf(servedDish.dishData);
-        if (index != -1 && currentOrder.orderedDishes[index])
+        if (index != -1 && currentOrder.orderedDishes[index] && !leaving)
         {
             // Correct dish served
             currentOrder.orderedDishes.Remove(currentOrder.orderedDishes[index]);
@@ -124,6 +147,8 @@ public class Customer : MonoBehaviour
         burritoText.enabled = false;
         pizzaText.enabled = false;
         doughnutText.enabled = false;
+        fillImage.enabled = false;
+        fillImageBg.enabled = false;
     }
     private float CalculateTotalOrderPrice()
     {
@@ -296,11 +321,13 @@ public class Customer : MonoBehaviour
 
         // Ensure the customer reaches the exact seat position
         transform.position = seat.position;
+        timer_start = true;
     }
 
 
     private void MoveTowardsExit()
     {
+        leaving = true;
         transform.position = Vector3.MoveTowards(transform.position, exitPoint.position, Time.deltaTime * 2f);
 
         if (Vector3.Distance(transform.position, exitPoint.position) < 0.1f)
@@ -308,6 +335,7 @@ public class Customer : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
     //public virtual void JudgeOrder(Dish servedDish)
     //{
     //    if (currentOrder.dish == servedDish.dishData)
