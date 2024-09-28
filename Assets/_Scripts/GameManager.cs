@@ -37,14 +37,12 @@ public class GameManager : MonoBehaviour
     }
     private IEnumerator InitializeCustomerRoutine()
     {
-        while (true) // Loop only while the game is running
+
+        while (game_running)
         {
-            if (game_running)
-            {
-                customerPool.SpawnCustomer(); // Call the method
-                Debug.Log("Spawn Customer called");
-                yield return new WaitForSeconds(interval); // Wait for 'interval' seconds
-            }
+            customerPool.SpawnCustomer(); // Call the method
+            Debug.Log("Spawn Customer called");
+            yield return new WaitForSeconds(interval); // Wait for 'interval' seconds
         }
     }
 
