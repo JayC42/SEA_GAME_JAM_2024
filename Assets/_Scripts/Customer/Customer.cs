@@ -31,6 +31,7 @@ public class Customer : MonoBehaviour
 
         // HERE IS NULL!! (NOT THE ISSUE)
         currentOrder = new Order(dishesManager, playerInventory); // Generate order based on inventory 
+        currentOrder.orderPrice = CalculateTotalOrderPrice();
         DisplayOrder();
     }
     private void Start()
@@ -68,48 +69,70 @@ public class Customer : MonoBehaviour
         }
 
         int index = currentOrder.orderedDishes.IndexOf(servedDish.dishData);
-        if (index != -1 && currentOrder.dishQuantities[index] > 0)
+        if (index != -1 && currentOrder.orderedDishes[index])
         {
             // Correct dish served
-            currentOrder.dishQuantities[index]--;
+            currentOrder.orderedDishes.Remove(currentOrder.orderedDishes[index]);
+            // foreach (int thing in currentOrder.dishQuantities)
+            // {
+            //     Debug.Log(thing);
+            // }
+            // currentOrder.dishQuantities[index]--;
             Destroy(servedDish.gameObject);
-            Debug.Log($"Dish served: {servedDish.dishData.dishName}, Remaining: {currentOrder.dishQuantities[index]}");
+            // Debug.Log($"Dish served: {servedDish.dishData.dishName}, Remaining: {currentOrder.dishQuantities[index]}");
             UpdateOrderDisplay(servedDish.dishData);
 
-            print("Revenue = " + CalculateTotalOrderPrice());
+            // print("Revenue = " + CalculateTotalOrderPrice());
 
             // Check if all dishes have been served
             bool isOrderComplete = true;
-            foreach (int quantity in currentOrder.dishQuantities)
-            {
-                if (quantity > 0)
-                {
-                    isOrderComplete = false;
-                    break;
-                }
-            }
+            // foreach (int quantity in currentOrder.dishQuantities)
+            // {
+            //     if (quantity > 0)
+            //     {
+            //         isOrderComplete = false;
+            //         break;
+            //     }
+            // }
+            if (currentOrder.orderedDishes.Count > 0)
+                isOrderComplete = false;
+
 
             if (isOrderComplete)
             {
                 Debug.Log("Service complete");
                 isOrderServed = true;
-                SpawnCoin(CalculateTotalOrderPrice());
-                print("Money = " + CalculateTotalOrderPrice());
+                HideOrder();
+                SpawnCoin(currentOrder.orderPrice);
+                print("Money = " + currentOrder.orderPrice);
                 MoveTowardsExit();
                 FindObjectOfType<CustomerPool>().CustomerLeftSeat(transform);
             }
         }
         else
         {
+            Debug.Log($"Rejecting Order | index: {index} | dish quan: {currentOrder.dishQuantities[index]}");
             RejectOrder(servedDish.gameObject);
         }
+    }
+    void HideOrder()
+    {
+        orderImage.SetActive(false);
+        dishImage1.SetActive(false);
+        dishImage2.SetActive(false);
+        dishImage3.SetActive(false);
+        burritoText.enabled = false;
+        pizzaText.enabled = false;
+        doughnutText.enabled = false;
     }
     private float CalculateTotalOrderPrice()
     {
         float totalPrice = 0f;
         for (int i = 0; i < currentOrder.orderedDishes.Count; i++)
         {
-            totalPrice += currentOrder.orderedDishes[i].price * currentOrder.dishQuantities[i];
+            // Debug.Log("item price is: " + currentOrder.orderedDishes[i].price + " | dish quantity is: " + currentOrder.dishQuantities[i]);
+            // totalPrice += currentOrder.orderedDishes[i].price * currentOrder.dishQuantities[i];
+            totalPrice += currentOrder.orderedDishes[i].price;
         }
         return totalPrice;
     }
@@ -118,7 +141,8 @@ public class Customer : MonoBehaviour
             int index = currentOrder.orderedDishes.IndexOf(servedDish);
             if (index != -1)
             {
-                currentOrder.dishQuantities[index]--;
+                // currentOrder.dishQuantities[index]--;
+                Debug.Log($"dish quant: {currentOrder.dishQuantities[index]}");
                 if (currentOrder.dishQuantities[index] == 0)
                 {
                     currentOrder.orderedDishes.RemoveAt(index);
