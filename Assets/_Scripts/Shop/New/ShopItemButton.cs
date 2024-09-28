@@ -15,7 +15,7 @@ public class ShopItemButton : MonoBehaviour
     {
         if (item != null)
         {
-            Debug.Log("Selected item: " + item.itemName);
+            //Debug.Log("Selected item: " + item.itemName);
             ShopSystem.Instance.SelectItem(item);
         }
     }

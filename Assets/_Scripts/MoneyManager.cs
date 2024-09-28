@@ -31,7 +31,7 @@ public class MoneyManager : MonoBehaviour
 
     private void Start()
     {
-        //totalCoins = 3; // Starting money
+        totalCoins = 1000; // Starting money
         UIManager.Instance.UpdateMoneyDisplay();
     }
 

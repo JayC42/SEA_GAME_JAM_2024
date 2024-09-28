@@ -32,6 +32,7 @@ public class ShopSystem : MonoBehaviour
     {
         playerInventory = PlayerInventory.Instance;
         purchaseButton.onClick.AddListener(PurchaseSelectedItem);
+        refundButton.onClick.AddListener(RefundSelectedItem);
     }
 
     public void SelectItem(ShopItem item)
@@ -47,13 +48,27 @@ public class ShopSystem : MonoBehaviour
         {
             itemNameText.text = selectedItem.itemName;
             descriptionText.text = selectedItem.description;
-            purchaseButton.interactable = !selectedItem.isBought;
+            bool canAfford = MoneyManager.Instance.TotalCoins >= selectedItem.price;
+
+            purchaseButton.gameObject.SetActive(!selectedItem.isBought);
+            refundButton.gameObject.SetActive(selectedItem.isBought);
+
+            purchaseButton.interactable = !selectedItem.isBought && canAfford;
+            if (!canAfford)
+            {
+                purchaseButton.GetComponent<Image>().color = Color.gray;
+            }
+            else
+            {
+                purchaseButton.GetComponent<Image>().color = Color.white;
+            }
         }
         else
         {
             itemNameText.text = "Select an item";
             descriptionText.text = "";
-            purchaseButton.interactable = false;
+            purchaseButton.gameObject.SetActive(false);
+            refundButton.gameObject.SetActive(false);
         }
     }
 
@@ -64,6 +79,17 @@ public class ShopSystem : MonoBehaviour
             MoneyManager.Instance.RemoveCoins(selectedItem.price);
             selectedItem.isBought = true;
             selectedItem.ApplyEffect();
+            PlayerInventory.Instance.ApplyUpgrade(selectedItem);
+            UpdateItemDisplay();
+        }
+    }
+    private void RefundSelectedItem()
+    {
+        if (selectedItem != null && selectedItem.isBought)
+        {
+            MoneyManager.Instance.AddCoins(selectedItem.price);
+            selectedItem.isBought = false;
+            PlayerInventory.Instance.RemoveUpgrade(selectedItem);
             UpdateItemDisplay();
         }
     }
