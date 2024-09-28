@@ -8,8 +8,9 @@ using TMPro;
 // Define the MenuPanel enum
 public enum MenuPanel
 {
-    Menu,
-    StartGame,
+    LoadScene, 
+    StartGame, 
+    MainMenu,
     Settings,
     StoreShed,
     GameScene
@@ -18,8 +19,10 @@ public enum MenuPanel
 public class MainMenu : MonoBehaviour
 {
     [Header("Main Menu Panels")]
-    [SerializeField] private GameObject menuPanel;
+    [SerializeField] private GameObject signBoardPanel; 
+    [SerializeField] private GameObject loadPanel;
     [SerializeField] private GameObject startGamePanel;
+    [SerializeField] private GameObject mainMenuPanel;
     [SerializeField] private GameObject settingsPanel;
     [SerializeField] private GameObject storeShedPanel;
     [SerializeField] private GameObject gameScenePanel;
@@ -30,24 +33,29 @@ public class MainMenu : MonoBehaviour
     public MenuPanel currentPanel; // This will show up in the Inspector
 
     [Header("Sounds")]
-    public AudioClip mmMusic;
-    public AudioClip buttonClickSFX;
+    public AudioClip ABGM;
+    public AudioClip BBGM;
+    public AudioClip CBGM;
+    public AudioClip EBGM;
+    public AudioClip dayEndSfx; 
+    public AudioClip buttonClickSFX1;
+    public AudioClip buttonClickSFX2;
+
     public AudioClip gameStartClickSFX;
     private Coroutine previewCoroutine;
     private void Awake()
     {
         // Populate the dictionary with references to the panels
-        menuPanels[MenuPanel.Menu] = menuPanel;
+        menuPanels[MenuPanel.LoadScene] = loadPanel;
         menuPanels[MenuPanel.StartGame] = startGamePanel;
+        menuPanels[MenuPanel.MainMenu] = mainMenuPanel;
         menuPanels[MenuPanel.Settings] = settingsPanel;
         menuPanels[MenuPanel.StoreShed] = storeShedPanel;
         menuPanels[MenuPanel.GameScene] = gameScenePanel;
     }
     private void Start()
     {
-       // Add LoadingScreen
-        AudioManager.Instance.PlayMusic(mmMusic);
-        ShowMainMenu();
+        ShowLoading(); 
         LoadVolumeSettings();
     }
 
@@ -82,39 +90,57 @@ public class MainMenu : MonoBehaviour
         PlayerPrefs.SetFloat("sfxVolume", AudioManager.Instance.GetSFXVolume());
         PlayerPrefs.Save();
     }
-
-    public void ShowMainMenu()
+    public void ShowLoading()
     {
-        SetActivePanel(MenuPanel.Menu);
+        AudioManager.Instance.PlayMusic(ABGM);
+        SetActivePanel(MenuPanel.LoadScene);
     }
-
     public void ShowStartGamePanel()
     {
-        AudioManager.Instance.PlaySFX(buttonClickSFX);
+        AudioManager.Instance.PlaySFX(buttonClickSFX2);
         SetActivePanel(MenuPanel.StartGame);
     }
-
-    public void OnSettingsButtonClicked()
+    public void ShowMainMenu()
     {
-        AudioManager.Instance.PlaySFX(buttonClickSFX);
+        AudioManager.Instance.PlayMusic(BBGM);
+        SetActivePanel(MenuPanel.MainMenu);
+    }
+    public void ShowSignBoard()
+    {
+        AudioManager.Instance.PlaySFX(buttonClickSFX1);
+        signBoardPanel.SetActive(true);
+    }
+    public void HideSignBoard()
+    {
+        AudioManager.Instance.PlaySFX(buttonClickSFX1);
+        signBoardPanel.SetActive(false);
+    }
+    
+    public void ShowSettingsPanel()
+    {
+        AudioManager.Instance.PlaySFX(buttonClickSFX2);
         SetActivePanel(MenuPanel.Settings);
     }
-
-    public void OnPlayButtonClicked()
+    public void ShowBasementShopScene()
     {
-        AudioManager.Instance.PlaySFX(buttonClickSFX);
+        AudioManager.Instance.PlaySFX(buttonClickSFX1);
         ShowStartGamePanel();
+    }
+    public void ShowGameScene()
+    {
+        AudioManager.Instance.PlaySFX(buttonClickSFX2);
+        SetActivePanel(MenuPanel.GameScene);
     }
 
     public void OnQuitButtonClicked()
     {
-        AudioManager.Instance.PlaySFX(buttonClickSFX);
+        AudioManager.Instance.PlaySFX(buttonClickSFX1);
         Application.Quit();
     }
 
     private void OnBackButtonClicked(MenuPanel panelToShow)
     {
-        AudioManager.Instance.PlaySFX(buttonClickSFX);
+        AudioManager.Instance.PlaySFX(buttonClickSFX2);
 
         foreach (var panel in menuPanels.Values)
         {
@@ -122,21 +148,6 @@ public class MainMenu : MonoBehaviour
         }
 
         menuPanels[panelToShow].SetActive(true);
-    }
-
-    public void OnBackToMainMenu()
-    {
-        OnBackButtonClicked(MenuPanel.Menu);
-    }
-
-    public void OnBackToStart()
-    {
-        OnBackButtonClicked(MenuPanel.StartGame);
-    }
-
-    public void OnBackToSettings()
-    {
-        OnBackButtonClicked(MenuPanel.Settings);
     }
 
     public void RestartGameScene()
@@ -150,12 +161,5 @@ public class MainMenu : MonoBehaviour
     public void PauseGameScene()
     {
 
-    }
-
-    private IEnumerator LoadSceneWithDelay(string sceneName)
-    {
-        LoadingScreen.Instance.NowLoading();
-        yield return new WaitForSeconds(1f);
-        SceneManager.LoadScene(sceneName);
     }
 }
