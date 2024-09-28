@@ -13,14 +13,20 @@ public class GameOrderManager : MonoBehaviour
     private List<Order> allOrders = new List<Order>();
     
     // Initialize 10 customer orders
-    public void InitializeOrdersForTenCustomers()
+    public void InitializeAllCustomers(int count)
     {
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < count; i++)
         {
             Order newOrder = GenerateCustomerOrder();
             allOrders.Add(newOrder);
         }
     }
+    // public void InitializeCustomer()
+    // {
+
+    //     Order newOrder = GenerateCustomerOrder();
+    //     allOrders.Add(newOrder);
+    // }
 
     private Order GenerateCustomerOrder()
     {

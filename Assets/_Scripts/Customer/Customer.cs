@@ -26,10 +26,11 @@ public class Customer : MonoBehaviour
     // for patience bar
     public Image fillImage; //UI image type: Filled
     public Image fillImageBg; //UI image type: Filled
-    public float fillDuration = 3f;
+    public float fillDuration = 5f;
     private float currentFillAmount = 0f;
     private bool leaving = false;
     private bool timer_start = false;
+    public int seatNumber;
 
     private void Awake()
     {
@@ -64,7 +65,8 @@ public class Customer : MonoBehaviour
                     //actions here //eg: customer angry run away
                     HideOrder();
                     MoveTowardsExit();
-                    FindObjectOfType<CustomerPool>().CustomerLeftSeat(transform);
+                    isOrderServed = true;
+                    FindObjectOfType<CustomerPool>().CustomerLeftSeat(seatNumber);
                 }
             }
         }
@@ -129,7 +131,7 @@ public class Customer : MonoBehaviour
                 SpawnCoin(currentOrder.orderPrice);
                 print("Money = " + currentOrder.orderPrice);
                 MoveTowardsExit();
-                FindObjectOfType<CustomerPool>().CustomerLeftSeat(transform);
+                FindObjectOfType<CustomerPool>().CustomerLeftSeat(seatNumber);
             }
         }
         else
