@@ -268,8 +268,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fillImage: {fileID: 1705554494261081233}
   fillDuration: 3
-  currentFillAmount: 0
-  isProducing: 0
   itemPrefab: {fileID: 1993487074315676454, guid: 02a90b51449db29489bd88b70cbdf3ca, type: 3}
   itemHolders:
   - {fileID: 330310091}
@@ -1038,7 +1036,7 @@ Transform:
   m_LocalScale: {x: 1.7516, y: 1.3916299, z: 1.872848}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 852441109}
+  m_Father: {fileID: 1591622230}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &260841900
 BoxCollider2D:
@@ -1287,7 +1285,7 @@ Transform:
   m_LocalScale: {x: 3, y: 2.7463446, z: 1.7569762}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 852441109}
+  m_Father: {fileID: 1591622230}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &330310089
 BoxCollider2D:
@@ -1398,12 +1396,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4981fc6bbb09dba42b1c1d3e3ee4fb33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  items: []
   max_items: 1
-  itemPositions:
-  - {x: -0.2, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
-  - {x: 0.2, y: 0, z: 0}
 --- !u!1001 &403174206
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2264,7 +2257,7 @@ Transform:
   m_LocalScale: {x: 5.269294, y: 1.1169384, z: 1.7569762}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 852441109}
+  m_Father: {fileID: 1591622230}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &776362442
 MonoBehaviour:
@@ -2278,12 +2271,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4981fc6bbb09dba42b1c1d3e3ee4fb33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  items: []
   max_items: 3
-  itemPositions:
-  - {x: -0.2, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
-  - {x: 0.2, y: 0, z: 0}
 --- !u!61 &776362443
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2411,8 +2399,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameManager: {fileID: 1701359199}
-  moneyTxt: {fileID: 1795454835}
   timeTxt: {fileID: 1578269323}
+  moneyTxt: {fileID: 1795454835}
   money: 0
   reputation: 10
   gameTime: 30
@@ -2681,13 +2669,6 @@ RectTransform:
   - {fileID: 173439227}
   - {fileID: 36286563}
   - {fileID: 1591622230}
-  - {fileID: 2140193459}
-  - {fileID: 260841898}
-  - {fileID: 1804946945}
-  - {fileID: 1509279320}
-  - {fileID: 776362441}
-  - {fileID: 1790800314}
-  - {fileID: 330310087}
   - {fileID: 836056513}
   - {fileID: 950809541}
   - {fileID: 1204908889}
@@ -2969,15 +2950,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   snapPoints:
-  - {point: {fileID: 950809541}, requiredIngredient: cheese, isOccupied: 0, snappedIngredient: {fileID: 0}}
-  - {point: {fileID: 1204908889}, requiredIngredient: beans, isOccupied: 0, snappedIngredient: {fileID: 0}}
-  - {point: {fileID: 429831094}, requiredIngredient: meat, isOccupied: 0, snappedIngredient: {fileID: 0}}
+  - point: {fileID: 950809541}
+    requiredIngredient: cheese
+    isOccupied: 0
+    snappedIngredient: {fileID: 0}
+  - point: {fileID: 1204908889}
+    requiredIngredient: beans
+    isOccupied: 0
+    snappedIngredient: {fileID: 0}
+  - point: {fileID: 429831094}
+    requiredIngredient: meat
+    isOccupied: 0
+    snappedIngredient: {fileID: 0}
   snapRange: 0.5
   sunlightPrefab: {fileID: 1993487074315676454, guid: 02a90b51449db29489bd88b70cbdf3ca, type: 3}
   batteryAmount: 1
   sunlightHolders:
   - {fileID: 776362442}
-  draggableObjects: []
 --- !u!1 &899213809
 GameObject:
   m_ObjectHideFlags: 0
@@ -4234,7 +4223,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0903b68cd2e3907468dd80114665abc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clickCount: 0
   itemCAmount: 1
   itemPrefab: {fileID: 1993487074315676454, guid: 02a90b51449db29489bd88b70cbdf3ca, type: 3}
   itemHolders:
@@ -4744,7 +4732,7 @@ Transform:
   m_LocalScale: {x: 4.2036, y: 1.5484602, z: 4.276885}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 852441109}
+  m_Father: {fileID: 1591622230}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &1509279322
 BoxCollider2D:
@@ -5172,7 +5160,7 @@ Transform:
   - {fileID: 1804946945}
   - {fileID: 260841898}
   - {fileID: 2140193459}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 852441109}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1609443779
 PrefabInstance:
@@ -5624,7 +5612,7 @@ Transform:
   m_LocalScale: {x: 5.2468824, y: 1.1251774, z: 1.7569762}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 852441109}
+  m_Father: {fileID: 1591622230}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1790800315
 MonoBehaviour:
@@ -5638,12 +5626,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4981fc6bbb09dba42b1c1d3e3ee4fb33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  items: []
   max_items: 2
-  itemPositions:
-  - {x: -0.2, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
-  - {x: 0.2, y: 0, z: 0}
 --- !u!61 &1790800316
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6162,7 +6145,7 @@ Transform:
   m_LocalScale: {x: 1.7516, y: 1.3916299, z: 1.872848}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 852441109}
+  m_Father: {fileID: 1591622230}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1804946946
 MonoBehaviour:
@@ -6491,8 +6474,6 @@ MonoBehaviour:
   - {fileID: 260841902}
   itemBHolders:
   - {fileID: 1804946946}
-  isHolding: 0
-  currentFillAmount: 0
 --- !u!1001 &1871980673
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6886,6 +6867,7 @@ GameObject:
   - component: {fileID: 2010719984}
   - component: {fileID: 2010719983}
   - component: {fileID: 2010719982}
+  - component: {fileID: 2010719985}
   m_Layer: 0
   m_Name: Player Object
   m_TagString: Untagged
@@ -6933,6 +6915,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2010719985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2010719981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bae08810fe0c7d5498636e78abd1e185, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  priceMultiplier: 1
 --- !u!1001 &2103453900
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7026,7 +7021,7 @@ Transform:
   m_LocalScale: {x: 4.2329144, y: 12.8142, z: 2.4790435}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 852441109}
+  m_Father: {fileID: 1591622230}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &2140193461
 BoxCollider2D:
@@ -7337,14 +7332,4 @@ SceneRoots:
   - {fileID: 1082934262}
   - {fileID: 226993915}
   - {fileID: 1979628814}
-  - {fileID: 192195880}
-  - {fileID: 914952967}
-  - {fileID: 173439227}
-  - {fileID: 1591622230}
-  - {fileID: 836056513}
-  - {fileID: 950809541}
-  - {fileID: 1204908889}
-  - {fileID: 429831094}
-  - {fileID: 865161951}
-  - {fileID: 163009399}
   - {fileID: 914952967}

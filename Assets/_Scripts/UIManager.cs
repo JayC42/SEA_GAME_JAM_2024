@@ -7,7 +7,8 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager Instance { get; private set; } // Singleton instance
     public GameManager gameManager;
-    public TextMeshProUGUI timeTxt; 
+    public TextMeshProUGUI timeTxt;
+    public TextMeshProUGUI moneyTxt;
     public int money = 0;
     public float reputation = 10;   
     public float gameTime = 30f; // Initial time per level
