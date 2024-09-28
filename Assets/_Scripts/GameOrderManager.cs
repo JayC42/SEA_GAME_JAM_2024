@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 public class GameOrderManager : MonoBehaviour
 {
-    [SerializeField]
-    private int remainingBurritos = 15;
-    [SerializeField]
-    private int remainingPizzas = 15;
-    [SerializeField]
-    private int remainingDoughnuts = 20;
+    // [SerializeField]
+    // private int remainingBurritos = 15;
+    // [SerializeField]
+    // private int remainingPizzas = 15;
+    // [SerializeField]
+    // private int remainingDoughnuts = 20;
 
     private List<Order> allOrders = new List<Order>();
     
@@ -32,7 +32,6 @@ public class GameOrderManager : MonoBehaviour
     {
         //Order order = new Order();
         Order order = new Order(DishesManager.Instance, PlayerInventory.Instance);
-        Debug.Log("New Order object created.");
 
         // Check if the upgrade has been purchased
         bool isUpgradePurchased = PlayerInventory.Instance.IsCustomerMaxQuantityUpgradePurchased();

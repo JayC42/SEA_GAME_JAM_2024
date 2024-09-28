@@ -13,7 +13,8 @@ public class GameManager : MonoBehaviour
     public bool game_running = false;
     public GameOrderManager gameOrderManager;
     public UIManager timer;
-
+    public GameObject ui;
+    public GameObject game;
     private void Awake()
     {
         if (Instance == null)
@@ -27,13 +28,23 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        ui.SetActive(true);
+        game.SetActive(false);
+        // StartCoroutine(InitializeCustomerRoutine());
+        currentDay = 1;
+    }
     private IEnumerator InitializeCustomerRoutine()
     {
-        while (game_running) // Loop only while the game is running
+        while (true) // Loop only while the game is running
         {
-            customerPool.SpawnCustomer(); // Call the method
-            Debug.Log("Spawn Customer called");
-            yield return new WaitForSeconds(interval); // Wait for 'interval' seconds
+            if (game_running)
+            {
+                customerPool.SpawnCustomer(); // Call the method
+                Debug.Log("Spawn Customer called");
+                yield return new WaitForSeconds(interval); // Wait for 'interval' seconds
+            }
         }
     }
 
@@ -43,19 +54,17 @@ public class GameManager : MonoBehaviour
         Debug.Log("routine stopped");
         currentDay += 1;
     }
-    void Start()
-    {
-        //customerPool = GetComponent<CustomerPool>(); // Assumes CustomerPool is attached to the same GameObject
-        //StartGame();
-        StartCoroutine(InitializeCustomerRoutine());
-    }
 
     public void StartGame()
     {
+        ui.SetActive(false);
+        customerPool.DestroyAllCustomerInstances();
+        customerPool.InitializePool(customerPool.maxPoolSize);
+        game.SetActive(true);
         game_running = true;
         timer.timerIsRunning = true;
         timer.resetTimer();
-        InitializeCustomerRoutine();
+        StartCoroutine(InitializeCustomerRoutine());
     }
 
     void InitializeCustomerPool()

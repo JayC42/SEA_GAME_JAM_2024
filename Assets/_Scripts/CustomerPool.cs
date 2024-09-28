@@ -55,7 +55,7 @@ public class CustomerPool : MonoBehaviour
         {
             isSeatOccupied.Add(false); // Initialize seat occupancy
         }
-        gameManager.StartGame();
+        // gameManager.StartGame();
     }
 
     public void InitializePool(int totalCustomers)
@@ -138,7 +138,19 @@ public class CustomerPool : MonoBehaviour
         }
     }
 
+    public void DestroyAllCustomerInstances()
+    {
+        // Find all GameObjects tagged with "Customer"
+        GameObject[] customers = GameObject.FindGameObjectsWithTag("Customer");
 
+        // Loop through all the found objects and destroy each one
+        foreach (GameObject customer in customers)
+        {
+            Destroy(customer);
+        }
+
+        Debug.Log(customers.Length + " customer(s) destroyed.");
+    }
     public float GetSpawnRate(int level)
     {
         if (level <= 10)

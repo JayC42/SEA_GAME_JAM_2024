@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ProperItemHolder : MonoBehaviour
 {
-    public List<GameObject> items = new List<GameObject>();
+    private List<GameObject> items = new List<GameObject>();
     public int max_items = 3;
     public GameManager gameManager;
     private Vector3[] itemPositions = new Vector3[]
@@ -14,16 +14,9 @@ public class ProperItemHolder : MonoBehaviour
         new Vector3(0.2f, 0, 0)
     };
 
-    public bool CanAddItem(GameObject newItem)
+    public bool CanAddItem()
     {
-        if (newItem.name == "Doughnut(Clone)")
-            return gameManager.airQuantity < max_items;
-        else if (newItem.name == "Burrito(Clone)")
-            return gameManager.windQuantity < max_items;
-        else if (newItem.name == "Pizza(Clone)")
-            return gameManager.sunlightQuantity < max_items;
-        else
-            return false;
+        return items.Count < max_items;
     }
 
     public int GetRemainingSpace()
@@ -33,7 +26,7 @@ public class ProperItemHolder : MonoBehaviour
 
     public void AddItem(GameObject newItem)
     {
-        if (CanAddItem(newItem))
+        if (CanAddItem())
         {
             if (newItem.name == "Doughnut(Clone)")
                 gameManager.airQuantity += 1;

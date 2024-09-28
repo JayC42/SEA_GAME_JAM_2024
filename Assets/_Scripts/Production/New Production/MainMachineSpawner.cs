@@ -22,7 +22,6 @@ public class MainMachineSpawner : MonoBehaviour, IPointerDownHandler, IPointerUp
 
     private void Start()
     {
-        Debug.Log("MachineFiller script started");
         if (fillImage == null)
         {
             Debug.LogError("Fill Image is not assigned!");
@@ -33,7 +32,6 @@ public class MainMachineSpawner : MonoBehaviour, IPointerDownHandler, IPointerUp
     {
         if (isHolding)
         {
-            Debug.Log("Holding: " + currentFillAmount);
             currentFillAmount += Time.deltaTime / fillDuration;
             if (fillImage != null)
             {
@@ -50,13 +48,11 @@ public class MainMachineSpawner : MonoBehaviour, IPointerDownHandler, IPointerUp
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        Debug.Log("Pointer down detected");
         isHolding = true;
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        Debug.Log("Pointer up detected");
         isHolding = false;
         ResetFill();
     }
@@ -87,7 +83,7 @@ public class MainMachineSpawner : MonoBehaviour, IPointerDownHandler, IPointerUp
             {
                 GameObject newItem = Instantiate(prefab, availableHolder.transform.position, Quaternion.identity);
                 availableHolder.AddItems(newItem);
-                Debug.Log($"Spawned item {itemType} in holder {holders.IndexOf(availableHolder)}");
+                // Debug.Log($"Spawned item {itemType} in holder {holders.IndexOf(availableHolder)}");
             }
             else
             {
