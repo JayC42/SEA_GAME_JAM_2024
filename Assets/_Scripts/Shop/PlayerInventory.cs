@@ -27,20 +27,15 @@ public class PlayerInventory : MonoBehaviour
     // Apply an upgrade to the player's inventory
     public void ApplyUpgrade(IShopUpgrade upgrade)
     {
-        if (!Upgrades.ContainsKey(upgrade))
-        {
-            Upgrades.Add(upgrade, upgrade.Cost);
-        }
-        else
-        {
-            Upgrades[upgrade] = upgrade.Cost;
-        }
-
-        // Check if the upgrade is purchased
-        if (IsUpgradePurchased(upgrade))
-        {
-            InitializeUpgradeEffect(upgrade);
-        }
+        PurchaseUpgrade(upgrade);
+        // if (!Upgrades.ContainsKey(upgrade))
+        // {
+        //     Upgrades.Add(upgrade, upgrade.Cost);
+        // }
+        // else
+        // {
+        //     Upgrades[upgrade] = upgrade.Cost;
+        // }
     }
 
     // Check if an upgrade is purchased
@@ -48,106 +43,139 @@ public class PlayerInventory : MonoBehaviour
     {
         return Upgrades.ContainsKey(upgrade);
     }
-    // Initialize the upgrade effect
+    // Update the InitializeUpgradeEffect method
     private void InitializeUpgradeEffect(IShopUpgrade upgrade)
     {
-        // Update player's stats or game state accordingly
-        if (upgrade is PurifierAirMachineUnlock)
-        {
-            // Unlock machine functionality
-        }
-        else if (upgrade is WindMachineUnlock)
-        {
-            // Unlock machine functionality
-        }
-        if (upgrade is AirProductionQuantityUpgrade)
-        {
-            // Upgrade AirProductionQuantity functionality
-        }
-        else if (upgrade is WindProductionQuantityUpgrade)
-        {
-            // Upgrade WindProductionQuantity functionality
-        }
-        if (upgrade is AutoAirProductionUpgrade)
-        {
-            // Upgrade AirProductionQuantity functionality
-        }
-        else if (upgrade is AutoWindProductionUpgrade)
-        {
-            // Upgrade WindProductionQuantity functionality
-        }
-        else if (upgrade is ShopDecorationUpgrade)
-        {
-            // Upgrade WindProductionQuantity functionality
-        }
-        else if (upgrade is IncreasedCustomerUpgrade)
-        {
-            // Upgrade WindProductionQuantity functionality
-        }
+        upgrade.ApplyUpgrade();
+        // Remove individual checks for upgrade types
     }
-    // Refund an upgrade
+    // Update the RefundUpgrade method
     public void RefundUpgrade(IShopUpgrade upgrade)
     {
         if (Upgrades.ContainsKey(upgrade))
         {
             int refundAmount = Upgrades[upgrade];
             Upgrades.Remove(upgrade);
-
-            // Update player's money
-            UIManager.Instance.AddCoins(refundAmount);
-
-            // Update player's stats or game state accordingly
-            // Update player's stats or game state accordingly
-            if (upgrade is PurifierAirMachineUnlock)
-            {
-                // Refund machine functionality
-            }
-            else if (upgrade is WindMachineUnlock)
-            {
-                // Refund machine functionality
-            }
-            if (upgrade is AirProductionQuantityUpgrade)
-            {
-                // Refund AirProductionQuantity functionality
-            }
-            else if (upgrade is WindProductionQuantityUpgrade)
-            {
-                // Refund WindProductionQuantity functionality
-            }
-            if (upgrade is AutoAirProductionUpgrade)
-            {
-                // Refund AirProductionQuantity functionality
-            }
-            else if (upgrade is AutoWindProductionUpgrade)
-            {
-                // Refund WindProductionQuantity functionality
-            }
-            else if (upgrade is ShopDecorationUpgrade)
-            {
-                // Refund WindProductionQuantity functionality
-            }
-            else if (upgrade is IncreasedCustomerUpgrade)
-            {
-                // Refund WindProductionQuantity functionality
-            }
+            MoneyManager.Instance.AddCoins(refundAmount);
+            upgrade.IsPurchased = false;
         }
     }
+    // Initialize the upgrade effect
+    // private void InitializeUpgradeEffect(IShopUpgrade upgrade)
+    // {
+        // Update player's stats or game state accordingly
+        // if (upgrade is PurifierAirMachineUnlock)
+        // {
+        //     // Unlock machine functionality
+        // }
+        // else if (upgrade is WindMachineUnlock)
+        // {
+        //     // Unlock machine functionality
+        // }
+        // if (upgrade is AirProductionQuantityUpgrade)
+        // {
+        //     // Upgrade AirProductionQuantity functionality
+        // }
+        // else if (upgrade is WindProductionQuantityUpgrade)
+        // {
+        //     // Upgrade WindProductionQuantity functionality
+        // }
+        // if (upgrade is AutoAirProductionUpgrade)
+        // {
+        //     // Upgrade AirProductionQuantity functionality
+        // }
+        // else if (upgrade is AutoWindProductionUpgrade)
+        // {
+        //     // Upgrade WindProductionQuantity functionality
+        // }
+        // else if (upgrade is ShopDecorationUpgrade)
+        // {
+        //     // Upgrade WindProductionQuantity functionality
+        // }
+        // else if (upgrade is IncreasedCustomerUpgrade)
+        // {
+        //     // Upgrade WindProductionQuantity functionality
+        // }
+    //}
+    // Refund an upgrade
+    // public void RefundUpgrade(IShopUpgrade upgrade)
+    // {
+    //     if (Upgrades.ContainsKey(upgrade))
+    //     {
+    //         int refundAmount = Upgrades[upgrade];
+    //         Upgrades.Remove(upgrade);
+
+    //         // Update player's money
+    //         UIManager.Instance.AddCoins(refundAmount);
+
+    //         // Update player's stats or game state accordingly
+    //         // Update player's stats or game state accordingly
+    //         if (upgrade is PurifierAirMachineUnlock)
+    //         {
+    //             // Refund machine functionality
+    //         }
+    //         else if (upgrade is WindMachineUnlock)
+    //         {
+    //             // Refund machine functionality
+    //         }
+    //         if (upgrade is AirProductionQuantityUpgrade)
+    //         {
+    //             // Refund AirProductionQuantity functionality
+    //         }
+    //         else if (upgrade is WindProductionQuantityUpgrade)
+    //         {
+    //             // Refund WindProductionQuantity functionality
+    //         }
+    //         if (upgrade is AutoAirProductionUpgrade)
+    //         {
+    //             // Refund AirProductionQuantity functionality
+    //         }
+    //         else if (upgrade is AutoWindProductionUpgrade)
+    //         {
+    //             // Refund WindProductionQuantity functionality
+    //         }
+    //         else if (upgrade is ShopDecorationUpgrade)
+    //         {
+    //             // Refund WindProductionQuantity functionality
+    //         }
+    //         else if (upgrade is IncreasedCustomerUpgrade)
+    //         {
+    //             // Refund WindProductionQuantity functionality
+    //         }
+    //     }
+    // }
     #endregion
-    // This method increments the number of dish upgrades the player has purchased
-    public void PurchaseDishUpgrade()
+    public void PurchaseUpgrade(IShopUpgrade upgrade)
     {
-        // For example, a player could purchase up to 3 upgrades
-        maxDishCount = Mathf.Clamp(maxDishCount + 1, 1, 3);
-        Debug.Log("Dish upgrade purchased. Current available dishes: " + maxDishCount);
-    }
+        if (!Upgrades.ContainsKey(upgrade))
+        {
+            Upgrades.Add(upgrade, upgrade.Cost);
+            InitializeUpgradeEffect(upgrade);
+        }
+    }   
+//     public void ApplyUpgrade(IShopUpgrade upgrade)
+// {
+//     PurchaseUpgrade(upgrade);
+// }
 
-    // Optionally, you could refund a dish upgrade
-    public void RefundDishUpgrade()
-    {
-        maxDishCount = Mathf.Clamp(maxDishCount - 1, 1, 3);
-        Debug.Log("Dish upgrade refunded. Current available dishes: " + maxDishCount);
-    }
+// Update the InitializeUpgradeEffect method
+// private void InitializeUpgradeEffect(IShopUpgrade upgrade)
+// {
+//     upgrade.ApplyUpgrade();
+//     // Remove individual checks for upgrade types
+// }
 
+// Update the RefundUpgrade method
+// public void RefundUpgrade(IShopUpgrade upgrade)
+// {
+//     if (Upgrades.ContainsKey(upgrade))
+//     {
+//         int refundAmount = Upgrades[upgrade];
+//         Upgrades.Remove(upgrade);
+//         UIManager.Instance.AddCoins(refundAmount);
+//         upgrade.IsPurchased = false;
+//     }
+// }
     // Retrieve the current dish upgrade count
     public int GetDishUpgradeCount()
     {

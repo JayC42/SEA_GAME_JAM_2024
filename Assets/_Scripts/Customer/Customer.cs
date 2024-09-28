@@ -274,12 +274,6 @@ public class Customer : MonoBehaviour
         dishImage3.SetActive(false);
     }
 
-    private void PayForOrder(float orderPrice)
-    {
-        int payment = UIManager.Instance.money += (int)orderPrice;
-        UIManager.Instance.moneyTxt.text = "Money: $" + payment;
-    }
-
     public virtual void RejectOrder(GameObject servedDish)
     {
         Dish dish = servedDish.GetComponent<Dish>();

@@ -24,4 +24,10 @@ public class Burrito : MonoBehaviour
         // Check if the ingredient is valid for the burrito
         return true; // Placeholder
     }
+
+    public void A()
+    {
+        Debug.Log("Success");
+    }
 }
+

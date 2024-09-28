@@ -8,21 +8,22 @@ using TMPro;
 // Define the MenuPanel enum
 public enum MenuPanel
 {
-    MainMenu,
-    GameMode,
+    Menu,
+    StartGame,
     Settings,
-    SongSelect,
-    DifficultySelect
+    StoreShed,
+    GameScene
 }
 
 public class MainMenu : MonoBehaviour
 {
     [Header("Main Menu Panels")]
-    [SerializeField] private GameObject mainMenuPanel;
-    [SerializeField] private GameObject gameModePanel;
+    [SerializeField] private GameObject menuPanel;
+    [SerializeField] private GameObject startGamePanel;
     [SerializeField] private GameObject settingsPanel;
-    [SerializeField] private GameObject songSelectMenuPanel;
-    [SerializeField] private GameObject difficultySelectPanel;
+    [SerializeField] private GameObject storeShedPanel;
+    [SerializeField] private GameObject gameScenePanel;
+
     public Dictionary<MenuPanel, GameObject> menuPanels = new Dictionary<MenuPanel, GameObject>();
 
     [Header("Panel Selection")]
@@ -36,14 +37,15 @@ public class MainMenu : MonoBehaviour
     private void Awake()
     {
         // Populate the dictionary with references to the panels
-        menuPanels[MenuPanel.MainMenu] = mainMenuPanel;
-        menuPanels[MenuPanel.GameMode] = gameModePanel;
+        menuPanels[MenuPanel.Menu] = menuPanel;
+        menuPanels[MenuPanel.StartGame] = startGamePanel;
         menuPanels[MenuPanel.Settings] = settingsPanel;
-        menuPanels[MenuPanel.SongSelect] = songSelectMenuPanel;
-        menuPanels[MenuPanel.DifficultySelect] = difficultySelectPanel;
+        menuPanels[MenuPanel.StoreShed] = storeShedPanel;
+        menuPanels[MenuPanel.GameScene] = gameScenePanel;
     }
     private void Start()
     {
+       // Add LoadingScreen
         AudioManager.Instance.PlayMusic(mmMusic);
         ShowMainMenu();
         LoadVolumeSettings();
@@ -83,13 +85,13 @@ public class MainMenu : MonoBehaviour
 
     public void ShowMainMenu()
     {
-        SetActivePanel(MenuPanel.MainMenu);
+        SetActivePanel(MenuPanel.Menu);
     }
 
-    public void ShowGameModePanel()
+    public void ShowStartGamePanel()
     {
         AudioManager.Instance.PlaySFX(buttonClickSFX);
-        SetActivePanel(MenuPanel.GameMode);
+        SetActivePanel(MenuPanel.StartGame);
     }
 
     public void OnSettingsButtonClicked()
@@ -101,7 +103,7 @@ public class MainMenu : MonoBehaviour
     public void OnPlayButtonClicked()
     {
         AudioManager.Instance.PlaySFX(buttonClickSFX);
-        ShowGameModePanel();
+        ShowStartGamePanel();
     }
 
     public void OnQuitButtonClicked()
@@ -124,12 +126,12 @@ public class MainMenu : MonoBehaviour
 
     public void OnBackToMainMenu()
     {
-        OnBackButtonClicked(MenuPanel.MainMenu);
+        OnBackButtonClicked(MenuPanel.Menu);
     }
 
-    public void OnBackToGameMode()
+    public void OnBackToStart()
     {
-        OnBackButtonClicked(MenuPanel.GameMode);
+        OnBackButtonClicked(MenuPanel.StartGame);
     }
 
     public void OnBackToSettings()
@@ -137,14 +139,17 @@ public class MainMenu : MonoBehaviour
         OnBackButtonClicked(MenuPanel.Settings);
     }
 
-    public void OnBackToSongSelect()
+    public void RestartGameScene()
     {
-        OnBackButtonClicked(MenuPanel.SongSelect);
-    }
 
-    public void OnBackToDifficultySelect()
+    }
+    public void ResumeGameScene()
     {
-        OnBackButtonClicked(MenuPanel.DifficultySelect);
+
+    }
+    public void PauseGameScene()
+    {
+
     }
 
     private IEnumerator LoadSceneWithDelay(string sceneName)
