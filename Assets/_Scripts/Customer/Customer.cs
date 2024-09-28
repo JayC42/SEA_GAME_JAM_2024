@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro; 
 using System.Collections.Generic;
 using System.Collections;
+using UnityEngine.UI;
 
 public class Customer : MonoBehaviour
 {
@@ -22,6 +23,13 @@ public class Customer : MonoBehaviour
     public Transform exitPoint; // The exit point where the customer will leave
     public GameObject coinPrefab;
     public bool isOrderServed = false;
+    // for patience bar
+    public Image fillImage; //UI image type: Filled
+    public Image fillImageBg; //UI image type: Filled
+    public float fillDuration = 3f;
+    private float currentFillAmount = 0f;
+    private bool leaving = false;
+    private bool timer_start = false;
 
     private void Awake()
     {
@@ -31,6 +39,7 @@ public class Customer : MonoBehaviour
 
         // HERE IS NULL!! (NOT THE ISSUE)
         currentOrder = new Order(dishesManager, playerInventory); // Generate order based on inventory 
+        currentOrder.orderPrice = CalculateTotalOrderPrice();
         DisplayOrder();
     }
     private void Start()
@@ -41,8 +50,23 @@ public class Customer : MonoBehaviour
     {
         if (!isOrderServed)
         {
-            // Customer continues to wait at their position
-            // Additional logic for customer animations can go here if needed
+            if (timer_start)
+                {
+                currentFillAmount += Time.deltaTime / fillDuration;
+
+                if (fillImage != null)
+                {
+                    fillImage.fillAmount = currentFillAmount;
+                }
+                // Check if the bar is fully filled
+                if (currentFillAmount >= 1f)
+                {
+                    //actions here //eg: customer angry run away
+                    HideOrder();
+                    MoveTowardsExit();
+                    FindObjectOfType<CustomerPool>().CustomerLeftSeat(transform);
+                }
+            }
         }
         else
         {
@@ -68,48 +92,72 @@ public class Customer : MonoBehaviour
         }
 
         int index = currentOrder.orderedDishes.IndexOf(servedDish.dishData);
-        if (index != -1 && currentOrder.dishQuantities[index] > 0)
+        if (index != -1 && currentOrder.orderedDishes[index] && !leaving)
         {
             // Correct dish served
-            currentOrder.dishQuantities[index]--;
+            currentOrder.orderedDishes.Remove(currentOrder.orderedDishes[index]);
+            // foreach (int thing in currentOrder.dishQuantities)
+            // {
+            //     Debug.Log(thing);
+            // }
+            // currentOrder.dishQuantities[index]--;
             Destroy(servedDish.gameObject);
-            Debug.Log($"Dish served: {servedDish.dishData.dishName}, Remaining: {currentOrder.dishQuantities[index]}");
+            // Debug.Log($"Dish served: {servedDish.dishData.dishName}, Remaining: {currentOrder.dishQuantities[index]}");
             UpdateOrderDisplay(servedDish.dishData);
 
-            print("Revenue = " + CalculateTotalOrderPrice());
+            // print("Revenue = " + CalculateTotalOrderPrice());
 
             // Check if all dishes have been served
             bool isOrderComplete = true;
-            foreach (int quantity in currentOrder.dishQuantities)
-            {
-                if (quantity > 0)
-                {
-                    isOrderComplete = false;
-                    break;
-                }
-            }
+            // foreach (int quantity in currentOrder.dishQuantities)
+            // {
+            //     if (quantity > 0)
+            //     {
+            //         isOrderComplete = false;
+            //         break;
+            //     }
+            // }
+            if (currentOrder.orderedDishes.Count > 0)
+                isOrderComplete = false;
+
 
             if (isOrderComplete)
             {
                 Debug.Log("Service complete");
                 isOrderServed = true;
-                SpawnCoin(CalculateTotalOrderPrice());
-                print("Money = " + CalculateTotalOrderPrice());
+                HideOrder();
+                SpawnCoin(currentOrder.orderPrice);
+                print("Money = " + currentOrder.orderPrice);
                 MoveTowardsExit();
                 FindObjectOfType<CustomerPool>().CustomerLeftSeat(transform);
             }
         }
         else
         {
+            Debug.Log($"Rejecting Order | index: {index} | dish quan: {currentOrder.dishQuantities[index]}");
             RejectOrder(servedDish.gameObject);
         }
+    }
+    void HideOrder()
+    {
+        orderImage.SetActive(false);
+        dishImage1.SetActive(false);
+        dishImage2.SetActive(false);
+        dishImage3.SetActive(false);
+        burritoText.enabled = false;
+        pizzaText.enabled = false;
+        doughnutText.enabled = false;
+        fillImage.enabled = false;
+        fillImageBg.enabled = false;
     }
     private float CalculateTotalOrderPrice()
     {
         float totalPrice = 0f;
         for (int i = 0; i < currentOrder.orderedDishes.Count; i++)
         {
-            totalPrice += currentOrder.orderedDishes[i].price * currentOrder.dishQuantities[i];
+            // Debug.Log("item price is: " + currentOrder.orderedDishes[i].price + " | dish quantity is: " + currentOrder.dishQuantities[i]);
+            // totalPrice += currentOrder.orderedDishes[i].price * currentOrder.dishQuantities[i];
+            totalPrice += currentOrder.orderedDishes[i].price;
         }
         return totalPrice;
     }
@@ -118,7 +166,8 @@ public class Customer : MonoBehaviour
             int index = currentOrder.orderedDishes.IndexOf(servedDish);
             if (index != -1)
             {
-                currentOrder.dishQuantities[index]--;
+                // currentOrder.dishQuantities[index]--;
+                Debug.Log($"dish quant: {currentOrder.dishQuantities[index]}");
                 if (currentOrder.dishQuantities[index] == 0)
                 {
                     currentOrder.orderedDishes.RemoveAt(index);
@@ -272,11 +321,13 @@ public class Customer : MonoBehaviour
 
         // Ensure the customer reaches the exact seat position
         transform.position = seat.position;
+        timer_start = true;
     }
 
 
     private void MoveTowardsExit()
     {
+        leaving = true;
         transform.position = Vector3.MoveTowards(transform.position, exitPoint.position, Time.deltaTime * 2f);
 
         if (Vector3.Distance(transform.position, exitPoint.position) < 0.1f)
@@ -284,6 +335,7 @@ public class Customer : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
     //public virtual void JudgeOrder(Dish servedDish)
     //{
     //    if (currentOrder.dish == servedDish.dishData)
