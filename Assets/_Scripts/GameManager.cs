@@ -57,7 +57,8 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         //customerPool = GetComponent<CustomerPool>(); // Assumes CustomerPool is attached to the same GameObject
-        //StartGame();
+        customerPool.InitializePool(customerPool.maxPoolSize);
+        StartGame();
         StartCoroutine(InitializeCustomerRoutine());
     }
 
