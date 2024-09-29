@@ -7,10 +7,10 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager Instance { get; private set; } // Singleton instance
     public GameManager gameManager;
+    public TextMeshProUGUI dayTxt;
     public TextMeshProUGUI timeTxt;
     public TextMeshProUGUI moneyTxt;
-    public int money = 0;
-    public float reputation = 10;   
+    public GameObject timerObject; 
     public float gameTime = 30f; // Initial time per level
     public float timeRemaining = 30f;
     public bool timerIsRunning = false; // Initial time per level
@@ -67,6 +67,13 @@ public class UIManager : MonoBehaviour
     }
     public void UpdateMoneyDisplay()
     {
-        moneyTxt.text = "Coins: " + MoneyManager.Instance.GetCoins();
+        if (MoneyManager.Instance.TotalCoins <= 0) 
+        { 
+            moneyTxt.text = "0"; 
+        }
+        else
+        {
+            moneyTxt.text = MoneyManager.Instance.GetCoins().ToString();
+        }
     }
 }

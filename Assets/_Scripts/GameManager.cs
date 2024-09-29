@@ -26,7 +26,18 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
+    private void Update()
+    {
+        // While game is running, show timer
+        if (game_running)
+        {
+            UIManager.Instance.timerObject.SetActive(true);
+        }
+        else
+        {
+            UIManager.Instance.timerObject.SetActive(false);
+        }
+    }
     private IEnumerator InitializeCustomerRoutine()
     {
         while (game_running) // Loop only while the game is running
