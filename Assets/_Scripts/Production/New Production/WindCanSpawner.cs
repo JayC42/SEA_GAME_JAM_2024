@@ -47,7 +47,6 @@ public class WindCanSpawner : MonoBehaviour
             ProperItemHolder availableHolder = FindAvailableHolder(holders);
             if (availableHolder != null)
             {
-                availableHolder.gameManager.windQuantity += 1;
                 GameObject newItem = Instantiate(prefab, availableHolder.transform.position, Quaternion.identity);
                 availableHolder.AddItem(newItem);
 

@@ -66,16 +66,16 @@ public class CustomerPool : MonoBehaviour
         {
             // if (Random.Range(1, 6) != 1)
             // {
-                GameObject customer = Instantiate(customerPrefab);
-                customer.SetActive(false);
-                pool.Add(customer);
+            GameObject customer = Instantiate(customerPrefab);
+            customer.SetActive(false);
+            pool.Add(customer);
             // }
             // else
             // {
-                // Debug.Log("WEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
-                // GameObject customer = Instantiate(ACustomerPrefab);
-                // customer.SetActive(false);
-                // pool.Add(customer);
+            // Debug.Log("WEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+            // GameObject customer = Instantiate(ACustomerPrefab);
+            // customer.SetActive(false);
+            // pool.Add(customer);
             // }
         }
 
@@ -88,30 +88,30 @@ public class CustomerPool : MonoBehaviour
         // Check if there are available seats
         // if (currentSeatIndex < seats.Count && !isSeatOccupied[currentSeatIndex])
         // {
-            foreach (GameObject customer in pool)
+        foreach (GameObject customer in pool)
+        {
+            if (customer && !customer.activeInHierarchy)
             {
-                if (customer && !customer.activeInHierarchy)
+                // customer.SetActive(true);
+                // customer.GetComponent<Customer>().EnterRestaurant(entrance); // Enter the restaurant
+                // Find the first unoccupied seat and move the customer there
+                for (int i = 0; i < seats.Count; i++)
                 {
-                    // customer.SetActive(true);
-                    // customer.GetComponent<Customer>().EnterRestaurant(entrance); // Enter the restaurant
-                    // Find the first unoccupied seat and move the customer there
-                    for (int i = 0; i < seats.Count; i++)
+                    if (!isSeatOccupied[i]) // If the seat is not occupied
                     {
-                        if (!isSeatOccupied[i]) // If the seat is not occupied
-                        {
-                            customer.SetActive(true);
-                            customer.GetComponent<Customer>().EnterRestaurant(entrance);
-                            customer.GetComponent<Customer>().gameManager = gameManager;
-                            customer.GetComponent<Customer>().MoveToSeat(seats[i]); // Move to the available seat
-                            isSeatOccupied[i] = true;
-                            customer.GetComponent<Customer>().seatNumber = i; // Mark this seat as occupied
-                            currentSeatIndex = i; // Set the current seat index to the seat the customer moved to
-                            return ; // Exit the loop once the customer has been seated
-                        }
+                        customer.SetActive(true);
+                        customer.GetComponent<Customer>().EnterRestaurant(entrance);
+                        customer.GetComponent<Customer>().gameManager = gameManager;
+                        customer.GetComponent<Customer>().MoveToSeat(seats[i]); // Move to the available seat
+                        isSeatOccupied[i] = true;
+                        customer.GetComponent<Customer>().seatNumber = i; // Mark this seat as occupied
+                        currentSeatIndex = i; // Set the current seat index to the seat the customer moved to
+                        return; // Exit the loop once the customer has been seated
                     }
-                    Debug.Log("seats full");
-                    return ;
                 }
+                Debug.Log("seats full");
+                return;
+            }
             // }
         }
     }
@@ -148,5 +148,18 @@ public class CustomerPool : MonoBehaviour
         else
             return hardSpawnRate; // Adjust rates as needed for higher levels
     }
-}
 
+    public void DestroyAllCustomerInstances()
+    {
+        // Find all GameObjects tagged with "Customer"
+        GameObject[] customers = GameObject.FindGameObjectsWithTag("Customer");
+
+        // Loop through all the found objects and destroy each one
+        foreach (GameObject customer in customers)
+        {
+            Destroy(customer);
+        }
+
+        Debug.Log(customers.Length + " customer(s) destroyed.");
+    }
+}

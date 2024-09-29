@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro; 
+using TMPro;
 using System.Collections.Generic;
 
 public class UIManager : MonoBehaviour
@@ -10,7 +10,7 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI dayTxt;
     public TextMeshProUGUI timeTxt;
     public TextMeshProUGUI moneyTxt;
-    public GameObject timerObject; 
+    public GameObject timerObject;
     public float gameTime = 30f; // Initial time per level
     public float timeRemaining = 30f;
     public bool timerIsRunning = false; // Initial time per level
@@ -18,7 +18,7 @@ public class UIManager : MonoBehaviour
 
     private void Awake()
     {
-        
+
         if (Instance == null)
         {
             Instance = this;
@@ -55,7 +55,7 @@ public class UIManager : MonoBehaviour
         {
             // Stop the timer when it reaches zero
             timerIsRunning = false;
-            gameManager.game_running = false;
+            gameManager.StopGame();
             Debug.Log("Time's up!");
         }
     }
@@ -67,9 +67,9 @@ public class UIManager : MonoBehaviour
     }
     public void UpdateMoneyDisplay()
     {
-        if (MoneyManager.Instance.TotalCoins <= 0) 
-        { 
-            moneyTxt.text = "0"; 
+        if (MoneyManager.Instance.TotalCoins <= 0)
+        {
+            moneyTxt.text = "0";
         }
         else
         {

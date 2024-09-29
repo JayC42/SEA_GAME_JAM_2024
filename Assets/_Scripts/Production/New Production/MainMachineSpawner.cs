@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 public class MainMachineSpawner : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     public Image fillImage;
-    public float fillDuration = 3f;
+    public float fillDuration = 1.5f;
     public int itemAAmount = 3;
     public int itemBAmount = 3;
 
@@ -31,7 +31,7 @@ public class MainMachineSpawner : MonoBehaviour, IPointerDownHandler, IPointerUp
 
     private void Update()
     {
-        if (isHolding)
+        if (Input.GetKey(KeyCode.Space))
         {
             Debug.Log("Holding: " + currentFillAmount);
             currentFillAmount += Time.deltaTime / fillDuration;
@@ -46,6 +46,8 @@ public class MainMachineSpawner : MonoBehaviour, IPointerDownHandler, IPointerUp
                 ResetFill();
             }
         }
+        else
+            ResetFill();
     }
 
     public void OnPointerDown(PointerEventData eventData)

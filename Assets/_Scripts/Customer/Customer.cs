@@ -1,5 +1,5 @@
 using UnityEngine;
-using TMPro; 
+using TMPro;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.UI;
@@ -27,7 +27,7 @@ public class Customer : MonoBehaviour
     // for patience bar
     public Image fillImage; //UI image type: Filled
     public Image fillImageBg; //UI image type: Filled
-    public float fillDuration = 5f;
+    public float fillDuration = 15f;
     private float currentFillAmount = 0f;
     protected bool leaving = false;
     private bool timer_start = false;
@@ -55,7 +55,7 @@ public class Customer : MonoBehaviour
         if (!isOrderServed)
         {
             if (timer_start)
-                {
+            {
                 currentFillAmount += Time.deltaTime / fillDuration;
 
                 if (fillImage != null)
@@ -63,7 +63,7 @@ public class Customer : MonoBehaviour
                     fillImage.fillAmount = currentFillAmount;
                 }
                 // Check if the bar is fully filled
-                if (currentFillAmount >= 1f && stopFilling == false)
+                if ((currentFillAmount >= 1f && stopFilling == false) || gameManager.game_running == false)
                 {
                     //actions here //eg: customer angry run away
                     stopFilling = true;
@@ -160,58 +160,57 @@ public class Customer : MonoBehaviour
     }
     protected void UpdateOrderDisplay(DishData servedDish)
     {
-            int index = currentOrder.orderedDishes.IndexOf(servedDish);
-            if (index != -1)
+        int index = currentOrder.orderedDishes.IndexOf(servedDish);
+        if (index != -1)
+        {
+            if (currentOrder.dishQuantities[index] == 0)
             {
-                if (currentOrder.dishQuantities[index] == 0)
-                {
-                    currentOrder.orderedDishes.RemoveAt(index);
-                    currentOrder.dishQuantities.RemoveAt(index);
-                }
+                currentOrder.orderedDishes.RemoveAt(index);
+                currentOrder.dishQuantities.RemoveAt(index);
             }
-   
-            // Update the text directly
-            Dictionary<string, int> dishCounts = new Dictionary<string, int>();
-            foreach (DishData dish in currentOrder.orderedDishes)
-            {
-                if (!dishCounts.ContainsKey(dish.dishName))
-                    dishCounts[dish.dishName] = 0;
-                dishCounts[dish.dishName]++;
-            }
+        }
 
-            if (dishCounts.ContainsKey("burrito"))
-            {
-                burritoText.text = "x " + dishCounts["burrito"];
-            }
-            else
-            {
-                burritoText.text = "";
-            }
+        // Update the text directly
+        Dictionary<string, int> dishCounts = new Dictionary<string, int>();
+        foreach (DishData dish in currentOrder.orderedDishes)
+        {
+            if (!dishCounts.ContainsKey(dish.dishName))
+                dishCounts[dish.dishName] = 0;
+            dishCounts[dish.dishName]++;
+        }
 
-            if (dishCounts.ContainsKey("pizza"))
-            {
-                pizzaText.text = "x " + dishCounts["pizza"];
-            }
-            else
-            {
-                pizzaText.text = "";
-            }
+        if (dishCounts.ContainsKey("burrito"))
+        {
+            burritoText.text = "x " + dishCounts["burrito"];
+        }
+        else
+        {
+            burritoText.text = "";
+        }
 
-            if (dishCounts.ContainsKey("doughnut"))
-            {
-                doughnutText.text = "x " + dishCounts["doughnut"];
-            }
-            else
-            {
-                doughnutText.text = "";
-            }
-     
+        if (dishCounts.ContainsKey("pizza"))
+        {
+            pizzaText.text = "x " + dishCounts["pizza"];
+        }
+        else
+        {
+            pizzaText.text = "";
+        }
+
+        if (dishCounts.ContainsKey("doughnut"))
+        {
+            doughnutText.text = "x " + dishCounts["doughnut"];
+        }
+        else
+        {
+            doughnutText.text = "";
+        }
+
     }
 
     protected void SpawnCoin(float value)
     {
         GameObject coin = Instantiate(coinPrefab, transform.position, Quaternion.identity);
-
         Coin coinScript = coin.GetComponent<Coin>();
         if (coinScript != null)
         {
@@ -225,9 +224,9 @@ public class Customer : MonoBehaviour
     protected void DisplayOrder()
     {
         HideDishImages();
-        burritoText.text = ""; 
-        pizzaText.text = ""; 
-        doughnutText.text = ""; 
+        burritoText.text = "";
+        pizzaText.text = "";
+        doughnutText.text = "";
 
         Dictionary<string, int> dishCounts = new Dictionary<string, int>();
 

@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
     public int currentLevel = 1;
     public float gameTime = 300f; // Initial time per level
     public CustomerPool customerPool;
-    public int interval = 5; 
+    public int interval = 5;
     public bool game_running = false;
     public GameOrderManager gameOrderManager;
     public UIManager timer;
@@ -48,26 +48,29 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void StopInitializeCustomer()
+    public void StopGame()
     {
+        game_running = false;
         StopCoroutine(InitializeCustomerRoutine()); // Stops the coroutine
-        Debug.Log("routine stopped");
         currentDay += 1;
+        Debug.Log("CURRENT DAY IS: " + currentDay);
     }
     void Start()
     {
         //customerPool = GetComponent<CustomerPool>(); // Assumes CustomerPool is attached to the same GameObject
-        customerPool.InitializePool(customerPool.maxPoolSize);
+        // customerPool.InitializePool(customerPool.maxPoolSize);
         StartGame();
-        StartCoroutine(InitializeCustomerRoutine());
+        // StartCoroutine(InitializeCustomerRoutine());
     }
 
     public void StartGame()
     {
+        customerPool.DestroyAllCustomerInstances();
+        customerPool.InitializePool(customerPool.maxPoolSize);
         game_running = true;
         timer.timerIsRunning = true;
         timer.resetTimer();
-        InitializeCustomerRoutine();
+        StartCoroutine(InitializeCustomerRoutine());
     }
 
     void InitializeCustomerPool()
