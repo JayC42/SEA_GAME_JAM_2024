@@ -43,7 +43,7 @@ public class CustomerPool : MonoBehaviour
             maxPoolSize = 30; // Adjust this value based on your game's requirements
         }
 
-        InitializePool(maxPoolSize);
+        //InitializePool(maxPoolSize);
         // InvokeRepeating("SpawnCustomer", 0f, 3f); // Spawn a customer every 3 seconds
         // Ensure seats list is populated correctly
         if (seats.Count == 0)
@@ -55,7 +55,7 @@ public class CustomerPool : MonoBehaviour
         {
             isSeatOccupied.Add(false); // Initialize seat occupancy
         }
-        gameManager.StartGame();
+        //gameManager.StartGame();
     }
 
     public void InitializePool(int totalCustomers)

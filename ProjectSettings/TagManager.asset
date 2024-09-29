@@ -10,6 +10,7 @@ TagManager:
   - Pizza
   - ExitPoint
   - Doughnut
+  - priceTag
   layers:
   - Default
   - TransparentFX

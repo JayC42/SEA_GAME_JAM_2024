@@ -4,16 +4,7 @@ using TMPro;
 public class MoneyManager : MonoBehaviour
 {
     public static MoneyManager Instance { get; private set; }
-    public int TotalCoins
-    {
-        get { return totalCoins; }
-        private set
-        {
-            totalCoins = value;
-            UIManager.Instance.UpdateMoneyDisplay();
-        }
-    }
-    private int totalCoins;
+    public int TotalCoins;
     public float priceMultiplier = 1f;
 
     private void Awake()
@@ -31,7 +22,6 @@ public class MoneyManager : MonoBehaviour
 
     private void Start()
     {
-        totalCoins = 1000; // Starting money
         UIManager.Instance.UpdateMoneyDisplay();
     }
 
@@ -42,7 +32,7 @@ public class MoneyManager : MonoBehaviour
 
     public void RemoveCoins(int amount)
     {
-        TotalCoins = Mathf.Max(0, totalCoins - amount);
+        TotalCoins = Mathf.Max(0, TotalCoins - amount);
     }
 
     public int GetCoins()

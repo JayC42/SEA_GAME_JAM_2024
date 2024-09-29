@@ -11,7 +11,7 @@ public enum MenuPanel
     LoadScene, 
     StartGame, 
     MainMenu,
-    Settings,
+    //Settings,
     StoreShed,
     GameScene
 }
@@ -23,7 +23,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private GameObject loadPanel;
     [SerializeField] private GameObject startGamePanel;
     [SerializeField] private GameObject mainMenuPanel;
-    [SerializeField] private GameObject settingsPanel;
+    [SerializeField] private GameObject menuSettingsPanel;
     [SerializeField] private GameObject storeShedPanel;
     [SerializeField] private GameObject gameScenePanel;
 
@@ -49,7 +49,7 @@ public class MainMenu : MonoBehaviour
         menuPanels[MenuPanel.LoadScene] = loadPanel;
         menuPanels[MenuPanel.StartGame] = startGamePanel;
         menuPanels[MenuPanel.MainMenu] = mainMenuPanel;
-        menuPanels[MenuPanel.Settings] = settingsPanel;
+        //menuPanels[MenuPanel.Settings] = settingsPanel;
         menuPanels[MenuPanel.StoreShed] = storeShedPanel;
         menuPanels[MenuPanel.GameScene] = gameScenePanel;
     }
@@ -116,10 +116,15 @@ public class MainMenu : MonoBehaviour
         signBoardPanel.SetActive(false);
     }
     
-    public void ShowSettingsPanel()
+    public void ShowMenuSettingsPanel()
     {
         AudioManager.Instance.PlaySFX(buttonClickSFX2);
-        SetActivePanel(MenuPanel.Settings);
+        menuSettingsPanel.SetActive(true);
+    }
+    public void HideMenuSettingsPanel()
+    {
+        AudioManager.Instance.PlaySFX(buttonClickSFX2);
+        menuSettingsPanel.SetActive(false);
     }
     public void ShowBasementShopScene()
     {
