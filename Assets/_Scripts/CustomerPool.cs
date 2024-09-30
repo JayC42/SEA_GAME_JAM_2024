@@ -160,6 +160,6 @@ public class CustomerPool : MonoBehaviour
             Destroy(customer);
         }
 
-        Debug.Log(customers.Length + " customer(s) destroyed.");
+        // Debug.Log(customers.Length + " customer(s) destroyed.");
     }
 }

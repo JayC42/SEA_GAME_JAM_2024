@@ -3,14 +3,23 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Shop Item", menuName = "Shop/Shop Item")]
 public class ShopItem : ScriptableObject
 {
-    public GameManager gameManager;
+    // public GameManager gameManager;
     public string itemName;
     public string description;
     public int price;
-    public bool isBought;
+    public bool isBought = false;
      public int Cost => price;
     public bool IsPurchased { get => isBought; set => isBought = value; }
     // Apply the correct effect based on the item name
+    private void Awake()
+    {
+        isBought = false;
+    }
+
+    private void OnEnable()
+    {
+        isBought = false; // Automatically reset this value when the asset is loaded
+    }
     public virtual void ApplyEffect()
     {
         //Debug.Log($"{itemName} effect applied!");
@@ -27,35 +36,35 @@ public class ShopItem : ScriptableObject
                 Debug.Log($"{itemName} + 1");
                 break;
             case "V2 Solar Energy Machine Module":
-                gameManager.sunlightDouble = true;
+                GameManager.Instance.sunlightDouble = true;
                 Debug.Log($"{itemName} + 1");
                 break;
             case "V2 Wind Energy Machine Module":
-                gameManager.windDouble = true;
+                GameManager.Instance.windDouble = true;
                 Debug.Log($"{itemName}");
                 break;
             case "V2 Air Purification Machine Module":
-                gameManager.airDouble = true;
+                GameManager.Instance.airDouble = true;
                 Debug.Log($"{itemName}");
                 break;
             case "Auto Solar Collection Chip":
-                gameManager.sunlightAuto = true;
+                GameManager.Instance.sunlightAuto = true;
                 Debug.Log($"{itemName}");
                 break;
             case "Auto Wind Collection Chip":
-                gameManager.windAuto = true;
+                GameManager.Instance.windAuto = true;
                 Debug.Log($"{itemName}");
                 break;
             case "Auto Air Collection Chip":
-                gameManager.airAuto = true;
+                GameManager.Instance.airAuto = true;
                 Debug.Log($"{itemName}");
                 break;
             case "Small Paint Bucket":
-                gameManager.coinMultiplier += 0.5f;
+                GameManager.Instance.coinMultiplier += 0.5f;
                 Debug.Log($"{itemName}");
                 break;
             case "Large Paint Bucket":
-                gameManager.coinMultiplier += 1f;
+                GameManager.Instance.coinMultiplier += 1f;
                 Debug.Log($"{itemName}");
                 break;
             case "Loud Speaker":
@@ -83,31 +92,31 @@ public class ShopItem : ScriptableObject
                 Debug.Log($"{itemName} - 1");
                 break;
             case "V2 Solar Energy Machine Module":
-                Debug.Log($"{itemName}");
+                GameManager.Instance.sunlightDouble = false;
                 break;
             case "V2 Wind Energy Machine Module":
-                Debug.Log($"{itemName}");
+                GameManager.Instance.windDouble = false;
                 break;
             case "V2 Air Purification Machine Module":
-                Debug.Log($"{itemName}");
+                GameManager.Instance.airDouble = false;
                 break;
             case "Auto Solar Collection Chip":
-                gameManager.sunlightAuto = false;
+                GameManager.Instance.sunlightAuto = false;
                 break;
             case "Auto Wind Collection Chip":
-                gameManager.windAuto = false;
+                GameManager.Instance.windAuto = false;
                 Debug.Log($"{itemName}");
                 break;
             case "Auto Air Collection Chip":
-                gameManager.airAuto = false;
+                GameManager.Instance.airAuto = false;
                 Debug.Log($"{itemName}");
                 break;
             case "Small Paint Bucket":
-                gameManager.coinMultiplier -= 0.5f;
+                GameManager.Instance.coinMultiplier -= 0.5f;
                 Debug.Log($"{itemName}");
                 break;
             case "Large Paint Bucket":
-                gameManager.coinMultiplier -= 1f;
+                GameManager.Instance.coinMultiplier -= 1f;
                 Debug.Log($"{itemName}");
                 break;
             case "Loud Speaker":

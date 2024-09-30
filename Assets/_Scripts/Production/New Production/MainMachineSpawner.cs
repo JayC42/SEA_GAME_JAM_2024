@@ -8,8 +8,8 @@ public class MainMachineSpawner : MonoBehaviour, IPointerDownHandler, IPointerUp
 {
     public Image fillImage;
     public float fillDuration = 1.5f;
-    public int itemAAmount = 3;
-    public int itemBAmount = 3;
+    public int itemAAmount = 0;
+    public int itemBAmount = 0;
 
     public GameObject itemAPrefab;
     public GameObject itemBPrefab;
@@ -22,7 +22,7 @@ public class MainMachineSpawner : MonoBehaviour, IPointerDownHandler, IPointerUp
 
     private void Start()
     {
-        Debug.Log("MachineFiller script started");
+        // Debug.Log("MachineFiller script started");
         if (fillImage == null)
         {
             Debug.LogError("Fill Image is not assigned!");
@@ -75,15 +75,15 @@ public class MainMachineSpawner : MonoBehaviour, IPointerDownHandler, IPointerUp
     private void ProduceItems()
     {
         //Debug.Log("Producing items");
-        SpawnItems(itemAPrefab, itemAAmount, itemAHolders, "A");
-        SpawnItems(itemBPrefab, itemBAmount, itemBHolders, "B");
+        SpawnItems(itemAPrefab, 1, itemAHolders, "A");
+        SpawnItems(itemBPrefab, 1, itemBHolders, "B");
     }
 
     private void SpawnItems(GameObject prefab, int amount, List<GeneralHolder> holders, string itemType)
     {
         for (int i = 0; i < amount; i++)
         {
-            GeneralHolder availableHolder = FindAvailableHolder(holders);
+            GeneralHolder availableHolder = FindAvailableHolder(holders, itemType);
             if (availableHolder != null)
             {
                 GameObject newItem = Instantiate(prefab, availableHolder.transform.position, Quaternion.identity);
@@ -99,10 +99,17 @@ public class MainMachineSpawner : MonoBehaviour, IPointerDownHandler, IPointerUp
         }
     }
 
-    private GeneralHolder FindAvailableHolder(List<GeneralHolder> holders)
+    private GeneralHolder FindAvailableHolder(List<GeneralHolder> holders, string itemType)
     {
+        int count = 0;
+        if (itemType == "A")
+            count = itemAAmount;
+        else
+            count = itemBAmount;
         foreach (GeneralHolder holder in holders)
         {
+            // if (holder.CanAddItemSun(count))
+            // {
             if (holder.CanAddItem())
             {
                 return holder;

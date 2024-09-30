@@ -12,7 +12,15 @@ public class GeneralHolder : MonoBehaviour
 
     public bool CanAddItem()
     {
+        // Debug.Log(heldItems.Count);
+        // if (heldItems[0].name == "Ingredient (C)(Clone)")
+        Debug.Log("wee no held: " + heldItems.Count + "max items: " + maxItems);
         return heldItems.Count < maxItems;
+    }
+
+    public bool CanAddItemSun(int count)
+    {
+        return count < maxItems;
     }
 
     public void AddItems(GameObject item)
@@ -21,7 +29,7 @@ public class GeneralHolder : MonoBehaviour
         {
             item.transform.SetParent(transform);
             heldItems.Add(item);
-            PositionItems();
+            PositionItems(item);
         }
         else
         {
@@ -29,20 +37,35 @@ public class GeneralHolder : MonoBehaviour
         }
     }
 
-    private void PositionItems()
+    private void PositionItems(GameObject item)
     {
-        for (int i = heldItems.Count - 1; i >= 0; i--)
+        int tmp = 0;
+        for (int i = heldItems.Count - 1; i >= 0; i--) // Iterate backward
+        {
+            if (heldItems[i] == null)
+            {
+                tmp = i;
+                heldItems.RemoveAt(i);
+                Debug.Log("wee REMOVED cur count: " + heldItems.Count);
+            }
+        }
+
+        Vector3 position = transform.position + itemOffset;
+        position.x += ((tmp - (heldItems.Count - 1) / 2f) * itemSpacing);
+        item.transform.position = position;
+        //     break;
+        // }
+    }
+
+    public void ClearThing()
+    {
+        for (int i = heldItems.Count - 1; i >= 0; i--) // Iterate backward
         {
             if (heldItems[i] == null)
             {
                 heldItems.RemoveAt(i);
-                continue;
+                Debug.Log("wee REMOVED cur count: " + heldItems.Count);
             }
-
-            Vector3 position = transform.position + itemOffset;
-            position.x += ((i - (heldItems.Count - 1) / 2f) * itemSpacing);
-            heldItems[i].transform.position = position;
-            break;
         }
     }
 

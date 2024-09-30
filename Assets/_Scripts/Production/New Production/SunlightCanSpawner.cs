@@ -133,6 +133,7 @@ public class SunlightCanSpawner : MonoBehaviour
             ProperItemHolder availableHolder = FindAvailableHolder(holders);
             if (availableHolder != null)
             {
+                destroyAllSnapIngredient();
                 GameObject newItem = Instantiate(prefab, availableHolder.transform.position, Quaternion.identity);
                 availableHolder.AddItem(newItem);
                 if (gameManager.sunlightDouble == true)
@@ -142,7 +143,6 @@ public class SunlightCanSpawner : MonoBehaviour
                     newItem = Instantiate(prefab, availableHolder.transform.position, Quaternion.identity);
                     availableHolder.AddItem(newItem);
                 }
-                destroyAllSnapIngredient();
             }
             else
             {
@@ -153,6 +153,10 @@ public class SunlightCanSpawner : MonoBehaviour
         }
 
     }
+
+    public MainMachineSpawner mainMachineSpawner;
+    public GeneralHolder generalHolderA;
+    public GeneralHolder generalHolderB;
     private void destroyAllSnapIngredient()
     {
         // Destroy all snapped ingredients
@@ -160,11 +164,13 @@ public class SunlightCanSpawner : MonoBehaviour
         {
             if (snapPoint.snappedIngredient != null)
             {
-                Destroy(snapPoint.snappedIngredient);
+                DestroyImmediate(snapPoint.snappedIngredient);
                 snapPoint.snappedIngredient = null; // Clear the reference
                 snapPoint.isOccupied = false; // Mark the snap point as no longer occupied
             }
         }
+        generalHolderA.ClearThing();
+        generalHolderB.ClearThing();
     }
 
     private ProperItemHolder FindAvailableHolder(List<ProperItemHolder> holders)

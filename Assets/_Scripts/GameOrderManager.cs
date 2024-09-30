@@ -32,7 +32,7 @@ public class GameOrderManager : MonoBehaviour
     {
         //Order order = new Order();
         Order order = new Order(DishesManager.Instance, PlayerInventory.Instance);
-        Debug.Log("New Order object created.");
+        // Debug.Log("New Order object created.");
 
         // Check if the upgrade has been purchased
         bool isUpgradePurchased = PlayerInventory.Instance.IsCustomerMaxQuantityUpgradePurchased();

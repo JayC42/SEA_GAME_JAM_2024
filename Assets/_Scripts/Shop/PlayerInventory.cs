@@ -28,7 +28,7 @@ public class PlayerInventory : MonoBehaviour
         {
             Upgrades.Add(upgrade, upgrade.price);
             InitializeUpgradeEffect(upgrade);
-            Debug.Log($"Purchased new item: {upgrade.itemName}");
+            // Debug.Log($"Purchased new item: {upgrade.itemName}");
         }
     }
 
@@ -78,7 +78,7 @@ public class PlayerInventory : MonoBehaviour
     }
     public void PrintPurchasedItems()
     {
-        Debug.Log($"Total purchased items: {Upgrades.Count}");
+        // Debug.Log($"Total purchased items: {Upgrades.Count}");
         foreach (var upgrade in Upgrades.Keys)
         {
             Debug.Log($"- {upgrade.itemName}");

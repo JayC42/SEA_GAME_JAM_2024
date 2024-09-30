@@ -59,7 +59,7 @@ public class UIManager : MonoBehaviour
             // Stop the timer when it reaches zero
             timerIsRunning = false;
             gameManager.StopGame();
-            Debug.Log("Time's up!");
+            // Debug.Log("Time's up!");
         }
     }
 

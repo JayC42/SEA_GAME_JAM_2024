@@ -34,8 +34,11 @@ public class WindCanSpawner : MonoBehaviour
                 timeSinceLastCall = 0f; // Reset the timer
             }
         }
-        else
-            ResetImages();
+        // else if (gameManager.game_running == false)
+        // {
+        //     clickCount = 0; //reset for next batch
+        //     ResetImages(); // Reset the images to be hidden again
+        // }
     }
     private void OnMouseDown()
     {

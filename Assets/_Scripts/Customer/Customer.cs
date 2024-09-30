@@ -101,7 +101,7 @@ public class Customer : MonoBehaviour
         if (index != -1 && currentOrder.orderedDishes[index] && !leaving)
         {
             // Correct dish served
-            Debug.Log(currentOrder.orderedDishes[index].dishName);
+            // Debug.Log(currentOrder.orderedDishes[index].dishName);
             if (currentOrder.orderedDishes[index].dishName == "doughnut")
                 gameManager.airQuantity -= 1;
             else if (currentOrder.orderedDishes[index].dishName == "burrito")
@@ -126,14 +126,14 @@ public class Customer : MonoBehaviour
                 isOrderServed = true;
                 HideOrder();
                 SpawnCoin(currentOrder.orderPrice);
-                print("Money = " + currentOrder.orderPrice);
+                // print("Money = " + currentOrder.orderPrice);
                 MoveTowardsExit();
                 FindObjectOfType<CustomerPool>().CustomerLeftSeat(seatNumber);
             }
         }
         else
         {
-            Debug.Log($"Rejecting Order");
+            // Debug.Log($"Rejecting Order");
             RejectOrder(servedDish.gameObject);
         }
     }

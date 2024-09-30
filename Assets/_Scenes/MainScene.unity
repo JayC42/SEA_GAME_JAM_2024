@@ -3104,7 +3104,7 @@ Transform:
   m_GameObject: {fileID: 305577584}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.129636, y: 0.1799342, z: 0.196868}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -6645,7 +6645,7 @@ MonoBehaviour:
   timeTxt: {fileID: 627673183}
   moneyTxt: {fileID: 1022757665}
   timerObject: {fileID: 936862131}
-  gameTime: 30
+  gameTime: 120
   timeRemaining: 30
   timerIsRunning: 0
 --- !u!4 &780670176
@@ -7334,6 +7334,9 @@ MonoBehaviour:
   gameManager: {fileID: 1701359199}
   sunlightHolders:
   - {fileID: 776362442}
+  mainMachineSpawner: {fileID: 1839828233}
+  generalHolderA: {fileID: 260841902}
+  generalHolderB: {fileID: 1804946946}
 --- !u!1 &883708325
 GameObject:
   m_ObjectHideFlags: 0
@@ -7821,7 +7824,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 151.79999, y: -23.099976}
+  m_AnchoredPosition: {x: 54.6, y: -54.1}
   m_SizeDelta: {x: 104.6883, y: 37.6892}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &936862133
@@ -11822,8 +11825,6 @@ GameObject:
   - component: {fileID: 1442977129}
   - component: {fileID: 1442977128}
   - component: {fileID: 1442977131}
-  - component: {fileID: 1442977133}
-  - component: {fileID: 1442977132}
   m_Layer: 5
   m_Name: Module B
   m_TagString: Untagged
@@ -11959,52 +11960,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: 71a956bdc6858a647a6a798ac7bf061b, type: 2}
---- !u!114 &1442977132
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1442977126}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_UiScaleMode: 1
-  m_ReferencePixelsPerUnit: 100
-  m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 800}
-  m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
-  m_PhysicalUnit: 3
-  m_FallbackScreenDPI: 96
-  m_DefaultSpriteDPI: 96
-  m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
---- !u!223 &1442977133
-Canvas:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1442977126}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_RenderMode: 2
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
-  m_PixelPerfect: 0
-  m_ReceivesEvents: 1
-  m_OverrideSorting: 0
-  m_OverridePixelPerfect: 0
-  m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 25
-  m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
-  m_TargetDisplay: 0
 --- !u!1 &1509279319
 GameObject:
   m_ObjectHideFlags: 0
@@ -12391,7 +12346,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1540188576
 Transform:
   m_ObjectHideFlags: 0
@@ -13440,7 +13395,7 @@ Transform:
   m_GameObject: {fileID: 1790800313}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.78, y: 0.75, z: 0}
+  m_LocalPosition: {x: 1.78, y: 0.75, z: -1}
   m_LocalScale: {x: 2.485, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -13719,7 +13674,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1796377087}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &1796377089
 Camera:
   m_ObjectHideFlags: 0
@@ -14268,8 +14223,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fillImage: {fileID: 807838093}
   fillDuration: 3
-  itemAAmount: 1
-  itemBAmount: 1
+  itemAAmount: 0
+  itemBAmount: 0
   itemAPrefab: {fileID: 5491920870805585634, guid: 8f7f4d6b1024e884e961d19d7c36341f, type: 3}
   itemBPrefab: {fileID: 8633464486072268790, guid: 0c49ca5694237d242ae66bb8695f53b5, type: 3}
   itemAHolders:

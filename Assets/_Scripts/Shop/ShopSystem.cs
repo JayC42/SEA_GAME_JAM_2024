@@ -38,7 +38,6 @@ public class ShopSystem : MonoBehaviour
     public void SelectItem(ShopItem item)
     {
         selectedItem = item;
-        Debug.Log("Selected item: " + selectedItem.itemName);
         UpdateItemDisplay();
     }
 
@@ -50,8 +49,8 @@ public class ShopSystem : MonoBehaviour
             descriptionText.text = selectedItem.description;
             bool canAfford = MoneyManager.Instance.TotalCoins >= selectedItem.price;
 
-            purchaseButton.gameObject.SetActive(!selectedItem.isBought);
-            refundButton.gameObject.SetActive(selectedItem.isBought);
+            purchaseButton.gameObject.SetActive(selectedItem.isBought == false);
+            refundButton.gameObject.SetActive(selectedItem.isBought == true);
 
             purchaseButton.interactable = !selectedItem.isBought && canAfford;
             if (!canAfford)

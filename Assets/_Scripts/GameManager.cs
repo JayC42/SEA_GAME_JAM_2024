@@ -75,7 +75,7 @@ public class GameManager : MonoBehaviour
         while (game_running) // Loop only while the game is running
         {
             customerPool.SpawnCustomer(); // Call the method
-            Debug.Log("Spawn Customer called");
+            // Debug.Log("Spawn Customer called");
             yield return new WaitForSeconds(6f); // Wait for 'interval' seconds
         }
     }
@@ -86,7 +86,7 @@ public class GameManager : MonoBehaviour
         StopCoroutine(InitializeCustomerRoutine()); // Stops the coroutine
         currentDay += 1;
         UIManager.Instance.UpdateDayDisplay();
-        Debug.Log("CURRENT DAY IS: " + currentDay);
+        // Debug.Log("CURRENT DAY IS: " + currentDay);
         // Clear all ingredients in the game
         // GameObject[] ingredients = GameObject.FindGameObjectsWithTag("ingredients");
         // foreach (GameObject i in ingredients)

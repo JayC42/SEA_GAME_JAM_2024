@@ -888,11 +888,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a772e7790bd60b488dfded6ef9717ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  customerSprites:
-  - {fileID: 21300000, guid: f83e9451db2b55b4797b6fefd195b91e, type: 3}
-  - {fileID: 21300000, guid: 7d5382aaad62f8f458b6558b628dd868, type: 3}
-  - {fileID: 21300000, guid: 6478f196b0be7f840b63fbc7d34bd159, type: 3}
-  - {fileID: 21300000, guid: 2194cbeb88f7087409c96979fbfe594b, type: 3}
   playerInventory: {fileID: 0}
   orderImage: {fileID: 4568496776302625943}
   smileyImage: {fileID: 4568496775982700650}
@@ -909,7 +904,7 @@ MonoBehaviour:
   stopFilling: 0
   fillImage: {fileID: 5711019045665674109}
   fillImageBg: {fileID: 8533738900219045850}
-  fillDuration: 10
+  fillDuration: 15
   seatNumber: 0
   gameManager: {fileID: 0}
 --- !u!61 &6129836078969642238

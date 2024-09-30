@@ -17,11 +17,21 @@ public class ProperItemHolder : MonoBehaviour
     public bool CanAddItem(GameObject newItem)
     {
         if (newItem.name == "Doughnut(Clone)")
+        {
+            // Debug.Log("name: " + newItem.name + " | quantity: " + gameManager.airQuantity + " | max items: " + max_items);
             return gameManager.airQuantity < max_items;
+        }
         else if (newItem.name == "Burrito(Clone)")
+        {
+            // Debug.Log("name: " + newItem.name + " | quantity: " + gameManager.windQuantity + " | max items: " + max_items);
             return gameManager.windQuantity < max_items;
+        }
         else if (newItem.name == "Pizza(Clone)")
+        {
+            // Debug.Log("name: " + newItem.name + " | quantity: " + gameManager.sunlightQuantity + " | max items: " + max_items);
+            // Debug.Log("can add: " + (gameManager.sunlightQuantity < max_items));
             return gameManager.sunlightQuantity < max_items;
+        }
         else
             return false;
     }
@@ -33,17 +43,29 @@ public class ProperItemHolder : MonoBehaviour
 
     public void AddItem(GameObject newItem)
     {
-        if (CanAddItem(newItem))
+        if (CanAddItem(newItem) == true)
         {
             if (newItem.name == "Doughnut(Clone)")
+            {
                 gameManager.airQuantity += 1;
+                newItem.transform.SetParent(transform);
+                newItem.transform.localPosition = itemPositions[gameManager.airQuantity - 1];
+                items.Add(newItem);
+            }
             else if (newItem.name == "Burrito(Clone)")
+            {
                 gameManager.windQuantity += 1;
+                newItem.transform.SetParent(transform);
+                newItem.transform.localPosition = itemPositions[gameManager.windQuantity - 1];
+                items.Add(newItem);
+            }
             else if (newItem.name == "Pizza(Clone)")
+            {
                 gameManager.sunlightQuantity += 1;
-            newItem.transform.SetParent(transform);
-            newItem.transform.localPosition = itemPositions[items.Count];
-            items.Add(newItem);
+                newItem.transform.SetParent(transform);
+                newItem.transform.localPosition = itemPositions[gameManager.sunlightQuantity - 1];
+                items.Add(newItem);
+            }
         }
         else
         {
