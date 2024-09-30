@@ -107,6 +107,28 @@ public class GameManager : MonoBehaviour
         // StartCoroutine(InitializeCustomerRoutine());
     }
 
+    public void DestroyAll()
+{
+    List<GameObject> items = new List<GameObject>();
+
+    // Add objects with each tag to the List
+    items.AddRange(GameObject.FindGameObjectsWithTag("Ingredients"));
+    items.AddRange(GameObject.FindGameObjectsWithTag("Pizza"));
+    items.AddRange(GameObject.FindGameObjectsWithTag("Burrito"));
+    items.AddRange(GameObject.FindGameObjectsWithTag("Doughnut"));
+
+    // If you need an array instead of a List, you can convert the List to an array
+    GameObject[] itemsArray = items.ToArray();
+
+    foreach (GameObject item in items)
+    {
+        Destroy(item); // Destroy each item
+    }
+
+    GameManager.Instance.airQuantity = 0;
+    GameManager.Instance.windQuantity = 0;
+    GameManager.Instance.sunlightQuantity = 0;
+}
     public void StartGame()
     {
         customerPool.DestroyAllCustomerInstances();

@@ -38,7 +38,6 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2393,9 +2392,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e075eda38f941f408f83b193936dffa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxItems: 9
+  maxItems: 3
   itemSpacing: 0.5
-  itemOffset: {x: 0.2, y: 0, z: 0}
+  itemOffset: {x: 0, y: 0, z: 0}
   heldItems: []
 --- !u!1 &265982267
 GameObject:
@@ -3463,7 +3462,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   items: []
-  max_items: 1
+  max_items: 3
   gameManager: {fileID: 1701359199}
 --- !u!1 &336277541
 GameObject:
@@ -12151,9 +12150,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e075eda38f941f408f83b193936dffa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxItems: 15
+  maxItems: 9
   itemSpacing: 0.3
-  itemOffset: {x: 0.2, y: 0, z: 0}
+  itemOffset: {x: 0, y: 0, z: 0}
   heldItems: []
 --- !u!114 &1509279325
 MonoBehaviour:
@@ -12392,7 +12391,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1540188576
 Transform:
   m_ObjectHideFlags: 0
@@ -13307,10 +13306,10 @@ MonoBehaviour:
   gameScenePanel: {fileID: 1540188575}
   pauseScreen: {fileID: 111141606}
   currentPanel: 0
-  ABGM: {fileID: 8300000, guid: 16d73fc50e2fbbb4083cd2e2b0cc95fa, type: 3}
-  BBGM: {fileID: 8300000, guid: 050f379f476e3eb4c964301d0c6d112f, type: 3}
-  CBGM: {fileID: 8300000, guid: eef92b57aef0d99479966eb4b880ab3a, type: 3}
-  EBGM: {fileID: 8300000, guid: 370bcc3b8292ab54c806e44329ef122a, type: 3}
+  ABGM: {fileID: 8300000, guid: 9521dec1576e2a94c9ca1b895316c474, type: 3}
+  BBGM: {fileID: 8300000, guid: 4d155cb89a45b09459a6a7796b829f81, type: 3}
+  CBGM: {fileID: 8300000, guid: 9521dec1576e2a94c9ca1b895316c474, type: 3}
+  EBGM: {fileID: 8300000, guid: 825db4cdb8dec1c42a9539e71d4980a0, type: 3}
   dayEndSfx: {fileID: 8300000, guid: 10854b7899d78e64bb5ff240aaa7f4f1, type: 3}
   buttonClickSFX1: {fileID: 8300000, guid: 6c4cb41594b0b494bbc43257f84bb33e, type: 3}
   buttonClickSFX2: {fileID: 8300000, guid: cd357950dd6f8734bb6c437a6d91f382, type: 3}
@@ -13461,7 +13460,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   items: []
-  max_items: 2
+  max_items: 3
   gameManager: {fileID: 1701359199}
 --- !u!61 &1790800316
 BoxCollider2D:
@@ -13883,9 +13882,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e075eda38f941f408f83b193936dffa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxItems: 9
+  maxItems: 3
   itemSpacing: 0.5
-  itemOffset: {x: 0.2, y: 0, z: 0}
+  itemOffset: {x: 0, y: 0, z: 0}
   heldItems: []
 --- !u!61 &1804946947
 BoxCollider2D:

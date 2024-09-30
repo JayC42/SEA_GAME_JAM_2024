@@ -34,6 +34,8 @@ public class WindCanSpawner : MonoBehaviour
                 timeSinceLastCall = 0f; // Reset the timer
             }
         }
+        else
+            ResetImages();
     }
     private void OnMouseDown()
     {

@@ -33,7 +33,6 @@ public class MainMachineSpawner : MonoBehaviour, IPointerDownHandler, IPointerUp
     {
         if (Input.GetKey(KeyCode.Space))
         {
-            Debug.Log("Holding: " + currentFillAmount);
             currentFillAmount += Time.deltaTime / fillDuration;
             if (fillImage != null)
             {

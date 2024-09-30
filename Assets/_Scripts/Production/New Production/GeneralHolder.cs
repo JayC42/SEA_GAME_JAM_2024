@@ -40,8 +40,9 @@ public class GeneralHolder : MonoBehaviour
             }
 
             Vector3 position = transform.position + itemOffset;
-            position.x += (i - (heldItems.Count - 1) / 2f) * itemSpacing;
+            position.x += ((i - (heldItems.Count - 1) / 2f) * itemSpacing);
             heldItems[i].transform.position = position;
+            break;
         }
     }
 
