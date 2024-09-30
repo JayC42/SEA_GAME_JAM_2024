@@ -14,6 +14,8 @@ public class InstantMachineSpawner : MonoBehaviour
     public List<ProperItemHolder> itemHolders;
     public int itemAmount = 1;
 
+    public GameManager gameManager;
+    private float timeSinceLastCall = 0f;
 
     private void OnMouseDown()
     {
@@ -39,7 +41,22 @@ public class InstantMachineSpawner : MonoBehaviour
             if (currentFillAmount >= 1f)
             {
                 ProduceItems(itemPrefab, itemAmount, itemHolders); // Create the item
+                if (gameManager.airDouble == true)
+                {
+                    ProduceItems(itemPrefab, itemAmount, itemHolders);
+                    ProduceItems(itemPrefab, itemAmount, itemHolders);
+                }
                 ResetFill(); // Reset the fill bar
+            }
+        }
+        else if (gameManager.airAuto == true)
+        {
+            timeSinceLastCall += Time.deltaTime; // Increment the timer by the time passed since last frame
+
+            if (timeSinceLastCall >= 2f)
+            {
+                StartProduction(); // Call the function
+                timeSinceLastCall = 0f; // Reset the timer
             }
         }
     }

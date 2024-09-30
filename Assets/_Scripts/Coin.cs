@@ -13,11 +13,8 @@ public class Coin : MonoBehaviour
     private void CollectCoin()
     {
         // Update the money in the UIManager
-        MoneyManager.Instance.AddCoins((int)value);
+        MoneyManager.Instance.AddCoins(Mathf.RoundToInt(value * GameManager.Instance.coinMultiplier));
         // Destroy the coin after it has been collected
         Destroy(gameObject);
     }
 }
-
-
-

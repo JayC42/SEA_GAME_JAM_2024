@@ -24,7 +24,7 @@ public class SunlightCanSpawner : MonoBehaviour
 
     public List<ProperItemHolder> sunlightHolders;
     private List<Draggable> draggableObjects = new List<Draggable>();
-
+    private float timeSinceLastCall = 0f;
     void OnEnable()
     {
         Draggable.OnDraggableCreated += RegisterNewDraggable;
@@ -89,7 +89,19 @@ public class SunlightCanSpawner : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        if (gameManager.sunlightAuto == true && gameManager.game_running == true)
+        {
+            timeSinceLastCall += Time.deltaTime; // Increment the timer by the time passed since last frame
 
+            if (timeSinceLastCall >= 3f)
+            {
+                InstantiateSunlightCan(sunlightPrefab, batteryAmount, sunlightHolders); // Call the function
+                timeSinceLastCall = 0f; // Reset the timer
+            }
+        }
+    }
     // Method to check if all ingredients are in place
     private void CheckAllIngredientsInPlace()
     {
@@ -123,6 +135,13 @@ public class SunlightCanSpawner : MonoBehaviour
             {
                 GameObject newItem = Instantiate(prefab, availableHolder.transform.position, Quaternion.identity);
                 availableHolder.AddItem(newItem);
+                if (gameManager.sunlightDouble == true)
+                {
+                    newItem = Instantiate(prefab, availableHolder.transform.position, Quaternion.identity);
+                    availableHolder.AddItem(newItem);
+                    newItem = Instantiate(prefab, availableHolder.transform.position, Quaternion.identity);
+                    availableHolder.AddItem(newItem);
+                }
                 destroyAllSnapIngredient();
             }
             else

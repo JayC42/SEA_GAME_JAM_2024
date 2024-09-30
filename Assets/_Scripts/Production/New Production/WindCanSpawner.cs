@@ -14,12 +14,27 @@ public class WindCanSpawner : MonoBehaviour
     public Image[] clickImages; // Array to hold the 3 images (1 for each click)
     
     public WindCanSpawnerChecker windCanSpawnerChecker;
+    public GameManager gameManager;
+    private float timeSinceLastCall = 0f;
 
     private void Start()
     {
         ResetImages();
     }
 
+    void Update()
+    {
+        if (gameManager.windAuto == true && gameManager.game_running == true)
+        {
+            timeSinceLastCall += Time.deltaTime; // Increment the timer by the time passed since last frame
+
+            if (timeSinceLastCall >= 0.5f)
+            {
+                OnMouseDown(); // Call the function
+                timeSinceLastCall = 0f; // Reset the timer
+            }
+        }
+    }
     private void OnMouseDown()
     {
         clickCount++;
@@ -28,6 +43,11 @@ public class WindCanSpawner : MonoBehaviour
         if (clickCount == 3)
         {
             ProduceItems();
+            if (gameManager.windDouble == true)
+            {
+                ProduceItems();
+                ProduceItems();
+            }
             clickCount = 0; //reset for next batch
             ResetImages(); // Reset the images to be hidden again
         }

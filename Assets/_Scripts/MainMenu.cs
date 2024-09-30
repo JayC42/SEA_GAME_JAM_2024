@@ -26,6 +26,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private GameObject menuSettingsPanel;
     [SerializeField] private GameObject storeShedPanel;
     [SerializeField] private GameObject gameScenePanel;
+    [SerializeField]  private GameObject pauseScreen;
 
     public Dictionary<MenuPanel, GameObject> menuPanels = new Dictionary<MenuPanel, GameObject>();
 
@@ -55,13 +56,14 @@ public class MainMenu : MonoBehaviour
     }
     private void Start()
     {
-        ShowLoading(); 
-        LoadVolumeSettings();
+        //ShowLoading(); 
+        //LoadVolumeSettings();
+        ShowStartGamePanel();
     }
 
     private void OnDisable()
     {
-        SaveVolumeSettings();
+        //SaveVolumeSettings();
     }
 
  
@@ -92,8 +94,8 @@ public class MainMenu : MonoBehaviour
     }
     public void ShowLoading()
     {
+        StartCoroutine(ShowLoadSceneCoroutine());
         AudioManager.Instance.PlayMusic(ABGM);
-        SetActivePanel(MenuPanel.LoadScene);
     }
     public void ShowStartGamePanel()
     {
@@ -129,12 +131,13 @@ public class MainMenu : MonoBehaviour
     public void ShowBasementShopScene()
     {
         AudioManager.Instance.PlaySFX(buttonClickSFX1);
-        ShowStartGamePanel();
+        SetActivePanel(MenuPanel.StoreShed);
     }
     public void ShowGameScene()
     {
         AudioManager.Instance.PlaySFX(buttonClickSFX2);
         SetActivePanel(MenuPanel.GameScene);
+        GameManager.Instance.StartGame();
     }
 
     public void OnQuitButtonClicked()
@@ -154,17 +157,43 @@ public class MainMenu : MonoBehaviour
 
         menuPanels[panelToShow].SetActive(true);
     }
+    private IEnumerator ShowLoadSceneCoroutine()
+    {
+        SetActivePanel(MenuPanel.LoadScene);
+        yield return new WaitForSeconds(1f);
+        SetActivePanel(MenuPanel.MainMenu);
+    }
 
     public void RestartGameScene()
     {
+        // Stop the current game
+        GameManager.Instance.StopGame();
 
+        // Reset UI elements
+        UIManager.Instance.resetTimer();
+        UIManager.Instance.UpdateDayDisplay();
+        UIManager.Instance.UpdateMoneyDisplay();
+
+        // Start a new game
+        GameManager.Instance.StartGame();
+
+        // Ensure we're showing the game scene panel
+        SetActivePanel(MenuPanel.GameScene);
+
+        // Play a sound effect for restarting (optional)
+        AudioManager.Instance.PlaySFX(buttonClickSFX2);
     }
+
     public void ResumeGameScene()
     {
-
+        Time.timeScale = 1;
+        AudioManager.Instance.PlaySFX(buttonClickSFX2);
+        GameManager.Instance.isPaused = false;
     }
+
     public void PauseGameScene()
     {
-
+        Time.timeScale = 0;
+        AudioManager.Instance.PlaySFX(buttonClickSFX2);
     }
 }

@@ -27,7 +27,7 @@ public class Customer : MonoBehaviour
     // for patience bar
     public Image fillImage; //UI image type: Filled
     public Image fillImageBg; //UI image type: Filled
-    public float fillDuration = 15f;
+    public float fillDuration = 24f;
     private float currentFillAmount = 0f;
     protected bool leaving = false;
     private bool timer_start = false;
@@ -210,16 +210,17 @@ public class Customer : MonoBehaviour
 
     protected void SpawnCoin(float value)
     {
-        GameObject coin = Instantiate(coinPrefab, transform.position, Quaternion.identity);
-        Coin coinScript = coin.GetComponent<Coin>();
-        if (coinScript != null)
-        {
-            coinScript.value = value;
-        }
-        else
-        {
-            Debug.LogError("Coin prefab does not have a Coin component.");
-        }
+        // GameObject coin = Instantiate(coinPrefab, transform.position, Quaternion.identity);
+        // Coin coinScript = coin.GetComponent<Coin>();
+        // if (coinScript != null)
+        // {
+        //     coinScript.value = value;
+        // }
+        // else
+        // {
+        //     Debug.LogError("Coin prefab does not have a Coin component.");
+        // }
+        MoneyManager.Instance.AddCoins(Mathf.RoundToInt(value * GameManager.Instance.coinMultiplier));
     }
     protected void DisplayOrder()
     {

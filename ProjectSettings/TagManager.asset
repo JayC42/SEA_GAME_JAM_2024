@@ -11,6 +11,7 @@ TagManager:
   - ExitPoint
   - Doughnut
   - priceTag
+  - MoneyTable
   layers:
   - Default
   - TransparentFX

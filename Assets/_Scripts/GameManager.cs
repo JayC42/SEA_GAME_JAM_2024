@@ -13,7 +13,18 @@ public class GameManager : MonoBehaviour
     public bool game_running = false;
     public GameOrderManager gameOrderManager;
     public UIManager timer;
+    public float coinMultiplier = 1;
+    public GameObject pauseScreen;
 
+    public bool isPaused = false;
+    // this is gonna look ugly
+    public bool sunlightAuto; 
+    public bool windAuto; 
+    public bool airAuto;
+    public bool sunlightDouble; 
+    public bool windDouble; 
+    public bool airDouble;
+    private MainMenu mainMenu;
     private void Awake()
     {
         if (Instance == null)
@@ -26,17 +37,38 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
     private void Update()
     {
         // While game is running, show timer
-        if (game_running)
+        // if (game_running)
+        // {
+        UIManager.Instance.UpdateMoneyDisplay();
+        //     UIManager.Instance.timerObject.SetActive(true);
+        // }
+        // else
+        // {
+        //     UIManager.Instance.timerObject.SetActive(false);
+        // }
+        
+        // if (Input.GetKeyDown(KeyCode.Escape) && game_running)
+        // {
+        //     isPaused = true; 
+        // }
+        // TogglePauseScreen(); 
+
+    }
+    private void TogglePauseScreen()
+    {
+        if (isPaused)
         {
-            UIManager.Instance.timerObject.SetActive(true);
+            mainMenu.ResumeGameScene();
         }
         else
         {
-            UIManager.Instance.timerObject.SetActive(false);
+            mainMenu.PauseGameScene();
         }
+        pauseScreen.SetActive(!pauseScreen.activeSelf);
     }
     private IEnumerator InitializeCustomerRoutine()
     {
@@ -44,7 +76,7 @@ public class GameManager : MonoBehaviour
         {
             customerPool.SpawnCustomer(); // Call the method
             Debug.Log("Spawn Customer called");
-            yield return new WaitForSeconds(interval); // Wait for 'interval' seconds
+            yield return new WaitForSeconds(6f); // Wait for 'interval' seconds
         }
     }
 
@@ -53,13 +85,25 @@ public class GameManager : MonoBehaviour
         game_running = false;
         StopCoroutine(InitializeCustomerRoutine()); // Stops the coroutine
         currentDay += 1;
+        UIManager.Instance.UpdateDayDisplay();
         Debug.Log("CURRENT DAY IS: " + currentDay);
+        // Clear all ingredients in the game
+        // GameObject[] ingredients = GameObject.FindGameObjectsWithTag("ingredients");
+        // foreach (GameObject i in ingredients)
+        // {
+        //     Destroy(i);
+        // }
+        mainMenu.ShowMainMenu();
     }
+    
     void Start()
     {
+        UIManager.Instance.UpdateDayDisplay();
+        mainMenu = FindObjectOfType<MainMenu>();
         //customerPool = GetComponent<CustomerPool>(); // Assumes CustomerPool is attached to the same GameObject
         // customerPool.InitializePool(customerPool.maxPoolSize);
-        StartGame();
+        //Bind to button
+        //StartGame();
         // StartCoroutine(InitializeCustomerRoutine());
     }
 
@@ -70,6 +114,7 @@ public class GameManager : MonoBehaviour
         game_running = true;
         timer.timerIsRunning = true;
         timer.resetTimer();
+        UIManager.Instance.ShowTimer(); 
         StartCoroutine(InitializeCustomerRoutine());
     }
 

@@ -29,7 +29,10 @@ public class UIManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
+    private void Start()
+    {
+        HideTimer();
+    }
     private void Update()
     {
         if (timerIsRunning)
@@ -47,7 +50,7 @@ public class UIManager : MonoBehaviour
 
             // Clamp time to zero (in case it goes negative)
             timeRemaining = Mathf.Max(timeRemaining, 0);
-            timeTxt.text = "Time Remaining: " + Mathf.RoundToInt(timeRemaining).ToString();
+            timeTxt.text = Mathf.RoundToInt(timeRemaining).ToString();
 
             // Debug.Log("Time remaining: " + timeRemaining);
         }
@@ -65,6 +68,15 @@ public class UIManager : MonoBehaviour
         timeRemaining = gameTime;
         UpdateMoneyDisplay();
     }
+    public void ShowTimer()
+    {
+        timerObject.SetActive(true);
+    }
+
+    public void HideTimer()
+    {
+        timerObject.SetActive(false);
+    }
     public void UpdateMoneyDisplay()
     {
         if (MoneyManager.Instance.TotalCoins <= 0)
@@ -76,4 +88,9 @@ public class UIManager : MonoBehaviour
             moneyTxt.text = MoneyManager.Instance.GetCoins().ToString();
         }
     }
+    public void UpdateDayDisplay()
+    {
+        dayTxt.text = gameManager.currentDay.ToString();
+    }
+
 }
