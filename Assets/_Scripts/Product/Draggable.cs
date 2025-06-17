@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-
 public class Draggable : MonoBehaviour
 {
     public static event Action<Draggable> OnDraggableCreated; // Event to notify when a Draggable is created
@@ -11,10 +10,12 @@ public class Draggable : MonoBehaviour
     private bool isDragged = false;
     private Vector3 mouseDragStartPosition;
     private Vector3 spriteDragStartPosition;
+    private float zOffset;
 
     private void Start()
     {
         OnDraggableCreated?.Invoke(this); // Notify SnapController that this Draggable is created
+        zOffset = Camera.main.WorldToScreenPoint(transform.position).z;
     }
 
     private void OnMouseDown()
@@ -26,8 +27,8 @@ public class Draggable : MonoBehaviour
     {
         if (isDragged)
         {
-            Vector3 currentMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            transform.localPosition = spriteDragStartPosition + (currentMousePosition - mouseDragStartPosition);
+            Vector3 currentMousePosition = GetMouseWorldPosition();
+            transform.position = spriteDragStartPosition + (currentMousePosition - mouseDragStartPosition);
         }
     }
 
@@ -40,8 +41,8 @@ public class Draggable : MonoBehaviour
     public void StartDragging()
     {
         isDragged = true;
-        mouseDragStartPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        spriteDragStartPosition = transform.localPosition;
+        mouseDragStartPosition = GetMouseWorldPosition();
+        spriteDragStartPosition = transform.position;
     }
 
     public void StopDragging()
@@ -53,5 +54,12 @@ public class Draggable : MonoBehaviour
     public void DisableDragging()
     {
         isDragged = false; // Prevent further dragging
+    }
+
+    private Vector3 GetMouseWorldPosition()
+    {
+        Vector3 mouseScreenPosition = Input.mousePosition;
+        mouseScreenPosition.z = zOffset; // Use the stored Z offset for the screen to world conversion
+        return Camera.main.ScreenToWorldPoint(mouseScreenPosition);
     }
 }

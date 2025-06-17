@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dishName: burrito
   price: 5
-  dishImage: {fileID: 4724387030154371214, guid: 085dd05192cc021438d48d6f186ac59b, type: 3}
+  dishImage: {fileID: 21300000, guid: 1562e15d0dae63a4da7b3a8bfeead090, type: 3}
   mandatoryIngredients:
   - tortilla
   - meat

@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8813a130cf0a36748b0b3f43f15d8b46, type: 3}
+  m_Name: Auto Air Collection Chip
+  m_EditorClassIdentifier: 
+  itemName: Auto Air Collection Chip
+  description: With this, your air purification machine will automatically make pure
+    air bags for customers who need them, so you no longer need to manually start
+    the machine!!!
+  price: 302
+  isBought: 0

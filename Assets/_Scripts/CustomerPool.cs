@@ -6,6 +6,7 @@ public class CustomerPool : MonoBehaviour
 {
     [Header("Customer Settings")]
     public GameObject customerPrefab;
+    public GameObject ACustomerPrefab;
     public Transform entrance; // The entrance where customers will spawn
     public List<Transform> seats = new List<Transform>(); // The seats in the game
 
@@ -27,13 +28,14 @@ public class CustomerPool : MonoBehaviour
     public float hardSpawnRate = 5f;
 
     private List<GameObject> pool = new List<GameObject>();
-    private GameOrderManager gameOrderManager;
+    public GameOrderManager gameOrderManager;
+    public GameManager gameManager;
     private int currentSeatIndex = 0; // The index of the current seat
     public List<bool> isSeatOccupied = new List<bool>(); // Whether each seat is occupied
 
     private void Start()
     {
-        gameOrderManager = FindObjectOfType<GameOrderManager>();
+        gameManager = FindObjectOfType<GameManager>();
 
         // Check if the customer max quantity upgrade is purchased
         if (PlayerInventory.Instance.IsCustomerMaxQuantityUpgradePurchased())
@@ -41,9 +43,8 @@ public class CustomerPool : MonoBehaviour
             maxPoolSize = 30; // Adjust this value based on your game's requirements
         }
 
-        InitializePool(maxPoolSize);
-        InvokeRepeating("SpawnCustomer", 0f, 3f); // Spawn a customer every 3 seconds
-
+        //InitializePool(maxPoolSize);
+        // InvokeRepeating("SpawnCustomer", 0f, 3f); // Spawn a customer every 3 seconds
         // Ensure seats list is populated correctly
         if (seats.Count == 0)
         {
@@ -54,62 +55,79 @@ public class CustomerPool : MonoBehaviour
         {
             isSeatOccupied.Add(false); // Initialize seat occupancy
         }
-
+        //gameManager.StartGame();
     }
 
     public void InitializePool(int totalCustomers)
     {
-        totalCustomers = Mathf.Clamp(totalCustomers, 0, maxPoolSize); // Ensure it doesn't exceed max size
+        // totalCustomers = Mathf.Clamp(totalCustomers, 0, maxPoolSize); // Ensure it doesn't exceed max size
+        totalCustomers = maxPoolSize; // Ensure it doesn't exceed max size
         for (int i = 0; i < totalCustomers; i++)
         {
+            // if (Random.Range(1, 6) != 1)
+            // {
             GameObject customer = Instantiate(customerPrefab);
             customer.SetActive(false);
             pool.Add(customer);
+            // }
+            // else
+            // {
+            // Debug.Log("WEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+            // GameObject customer = Instantiate(ACustomerPrefab);
+            // customer.SetActive(false);
+            // pool.Add(customer);
+            // }
         }
 
         // Generate orders for the customers
-        gameOrderManager.InitializeOrdersForTenCustomers();
+        gameOrderManager.InitializeAllCustomers(totalCustomers);
     }
 
     public void SpawnCustomer()
     {
         // Check if there are available seats
-        if (currentSeatIndex < seats.Count && !isSeatOccupied[currentSeatIndex])
+        // if (currentSeatIndex < seats.Count && !isSeatOccupied[currentSeatIndex])
+        // {
+        foreach (GameObject customer in pool)
         {
-            foreach (GameObject customer in pool)
+            if (customer && !customer.activeInHierarchy)
             {
-                if (!customer.activeInHierarchy)
+                // customer.SetActive(true);
+                // customer.GetComponent<Customer>().EnterRestaurant(entrance); // Enter the restaurant
+                // Find the first unoccupied seat and move the customer there
+                for (int i = 0; i < seats.Count; i++)
                 {
-                    customer.SetActive(true);
-                    customer.GetComponent<Customer>().EnterRestaurant(entrance); // Enter the restaurant
-                    // Find the first unoccupied seat and move the customer there
-                    for (int i = 0; i < seats.Count; i++)
+                    if (!isSeatOccupied[i]) // If the seat is not occupied
                     {
-                        if (!isSeatOccupied[i]) // If the seat is not occupied
-                        {
-                            customer.GetComponent<Customer>().MoveToSeat(seats[i]); // Move to the available seat
-                            isSeatOccupied[i] = true; // Mark this seat as occupied
-                            currentSeatIndex = i; // Set the current seat index to the seat the customer moved to
-                            break; // Exit the loop once the customer has been seated
-                        }
-                        
+                        customer.SetActive(true);
+                        customer.GetComponent<Customer>().EnterRestaurant(entrance);
+                        customer.GetComponent<Customer>().gameManager = gameManager;
+                        customer.GetComponent<Customer>().MoveToSeat(seats[i]); // Move to the available seat
+                        isSeatOccupied[i] = true;
+                        customer.GetComponent<Customer>().seatNumber = i; // Mark this seat as occupied
+                        currentSeatIndex = i; // Set the current seat index to the seat the customer moved to
+                        return; // Exit the loop once the customer has been seated
                     }
                 }
+                Debug.Log("seats full");
+                return;
             }
+            // }
         }
     }
-    public void CustomerLeftSeat(Transform seat)
+    public void CustomerLeftSeat(int seat)
     {
-        int seatIndex = seats.IndexOf(seat);
+        // int seatIndex = seats.IndexOf(seat);
+        // Debug.Log("AWUIFGBHJR: " + seatIndex);
 
         // Ensure seatIndex is valid
-        if (seatIndex >= 0 && seatIndex < seats.Count)
+        if (seat >= 0 && seat < seats.Count)
         {
             // Mark the seat as unoccupied
-            isSeatOccupied[seatIndex] = false;
+            isSeatOccupied[seat] = false;
 
             // Adjust the current seat index if necessary
-            if (currentSeatIndex > seatIndex)
+            if (currentSeatIndex > seat)
             {
                 currentSeatIndex--;
             }
@@ -130,5 +148,18 @@ public class CustomerPool : MonoBehaviour
         else
             return hardSpawnRate; // Adjust rates as needed for higher levels
     }
-}
 
+    public void DestroyAllCustomerInstances()
+    {
+        // Find all GameObjects tagged with "Customer"
+        GameObject[] customers = GameObject.FindGameObjectsWithTag("Customer");
+
+        // Loop through all the found objects and destroy each one
+        foreach (GameObject customer in customers)
+        {
+            Destroy(customer);
+        }
+
+        // Debug.Log(customers.Length + " customer(s) destroyed.");
+    }
+}

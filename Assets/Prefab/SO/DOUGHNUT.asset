@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dishName: doughnut
   price: 2
-  dishImage: {fileID: -7486981061129559025, guid: 085dd05192cc021438d48d6f186ac59b, type: 3}
+  dishImage: {fileID: 21300000, guid: 0b568ef34ea30ff448045c1c4cd469eb, type: 3}
   mandatoryIngredients:
   - 'dough '
   optionalIngredients:

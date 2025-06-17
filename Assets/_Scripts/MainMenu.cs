@@ -8,50 +8,62 @@ using TMPro;
 // Define the MenuPanel enum
 public enum MenuPanel
 {
+    LoadScene, 
+    StartGame, 
     MainMenu,
-    GameMode,
-    Settings,
-    SongSelect,
-    DifficultySelect
+    //Settings,
+    StoreShed,
+    GameScene
 }
 
 public class MainMenu : MonoBehaviour
 {
     [Header("Main Menu Panels")]
+    [SerializeField] private GameObject signBoardPanel; 
+    [SerializeField] private GameObject loadPanel;
+    [SerializeField] private GameObject startGamePanel;
     [SerializeField] private GameObject mainMenuPanel;
-    [SerializeField] private GameObject gameModePanel;
-    [SerializeField] private GameObject settingsPanel;
-    [SerializeField] private GameObject songSelectMenuPanel;
-    [SerializeField] private GameObject difficultySelectPanel;
+    [SerializeField] private GameObject menuSettingsPanel;
+    [SerializeField] private GameObject storeShedPanel;
+    [SerializeField] private GameObject gameScenePanel;
+    [SerializeField]  private GameObject pauseScreen;
+
     public Dictionary<MenuPanel, GameObject> menuPanels = new Dictionary<MenuPanel, GameObject>();
 
     [Header("Panel Selection")]
     public MenuPanel currentPanel; // This will show up in the Inspector
 
     [Header("Sounds")]
-    public AudioClip mmMusic;
-    public AudioClip buttonClickSFX;
+    public AudioClip ABGM;
+    public AudioClip BBGM;
+    public AudioClip CBGM;
+    public AudioClip EBGM;
+    public AudioClip dayEndSfx; 
+    public AudioClip buttonClickSFX1;
+    public AudioClip buttonClickSFX2;
+
     public AudioClip gameStartClickSFX;
     private Coroutine previewCoroutine;
     private void Awake()
     {
         // Populate the dictionary with references to the panels
+        menuPanels[MenuPanel.LoadScene] = loadPanel;
+        menuPanels[MenuPanel.StartGame] = startGamePanel;
         menuPanels[MenuPanel.MainMenu] = mainMenuPanel;
-        menuPanels[MenuPanel.GameMode] = gameModePanel;
-        menuPanels[MenuPanel.Settings] = settingsPanel;
-        menuPanels[MenuPanel.SongSelect] = songSelectMenuPanel;
-        menuPanels[MenuPanel.DifficultySelect] = difficultySelectPanel;
+        //menuPanels[MenuPanel.Settings] = settingsPanel;
+        menuPanels[MenuPanel.StoreShed] = storeShedPanel;
+        menuPanels[MenuPanel.GameScene] = gameScenePanel;
     }
     private void Start()
     {
-        AudioManager.Instance.PlayMusic(mmMusic);
-        ShowMainMenu();
-        LoadVolumeSettings();
+        //ShowLoading(); 
+        //LoadVolumeSettings();
+        ShowStartGamePanel();
     }
 
     private void OnDisable()
     {
-        SaveVolumeSettings();
+        //SaveVolumeSettings();
     }
 
  
@@ -80,39 +92,63 @@ public class MainMenu : MonoBehaviour
         PlayerPrefs.SetFloat("sfxVolume", AudioManager.Instance.GetSFXVolume());
         PlayerPrefs.Save();
     }
-
+    public void ShowLoading()
+    {
+        StartCoroutine(ShowLoadSceneCoroutine());
+        AudioManager.Instance.PlayMusic(ABGM);
+    }
+    public void ShowStartGamePanel()
+    {
+        AudioManager.Instance.PlaySFX(buttonClickSFX2);
+        SetActivePanel(MenuPanel.StartGame);
+    }
     public void ShowMainMenu()
     {
+        AudioManager.Instance.PlayMusic(BBGM);
         SetActivePanel(MenuPanel.MainMenu);
     }
-
-    public void ShowGameModePanel()
+    public void ShowSignBoard()
     {
-        AudioManager.Instance.PlaySFX(buttonClickSFX);
-        SetActivePanel(MenuPanel.GameMode);
+        AudioManager.Instance.PlaySFX(buttonClickSFX1);
+        signBoardPanel.SetActive(true);
     }
-
-    public void OnSettingsButtonClicked()
+    public void HideSignBoard()
     {
-        AudioManager.Instance.PlaySFX(buttonClickSFX);
-        SetActivePanel(MenuPanel.Settings);
+        AudioManager.Instance.PlaySFX(buttonClickSFX1);
+        signBoardPanel.SetActive(false);
     }
-
-    public void OnPlayButtonClicked()
+    
+    public void ShowMenuSettingsPanel()
     {
-        AudioManager.Instance.PlaySFX(buttonClickSFX);
-        ShowGameModePanel();
+        AudioManager.Instance.PlaySFX(buttonClickSFX2);
+        menuSettingsPanel.SetActive(true);
+    }
+    public void HideMenuSettingsPanel()
+    {
+        AudioManager.Instance.PlaySFX(buttonClickSFX2);
+        menuSettingsPanel.SetActive(false);
+    }
+    public void ShowBasementShopScene()
+    {
+        AudioManager.Instance.PlaySFX(buttonClickSFX1);
+        SetActivePanel(MenuPanel.StoreShed);
+    }
+    public void ShowGameScene()
+    {
+        AudioManager.Instance.PlaySFX(buttonClickSFX2);
+        SetActivePanel(MenuPanel.GameScene);
+        GameManager.Instance.StartGame();
     }
 
     public void OnQuitButtonClicked()
     {
-        AudioManager.Instance.PlaySFX(buttonClickSFX);
+        AudioManager.Instance.PlaySFX(buttonClickSFX1);
         Application.Quit();
     }
 
     private void OnBackButtonClicked(MenuPanel panelToShow)
     {
-        AudioManager.Instance.PlaySFX(buttonClickSFX);
+        AudioManager.Instance.PlaySFX(buttonClickSFX2);
 
         foreach (var panel in menuPanels.Values)
         {
@@ -121,36 +157,43 @@ public class MainMenu : MonoBehaviour
 
         menuPanels[panelToShow].SetActive(true);
     }
-
-    public void OnBackToMainMenu()
+    private IEnumerator ShowLoadSceneCoroutine()
     {
-        OnBackButtonClicked(MenuPanel.MainMenu);
-    }
-
-    public void OnBackToGameMode()
-    {
-        OnBackButtonClicked(MenuPanel.GameMode);
-    }
-
-    public void OnBackToSettings()
-    {
-        OnBackButtonClicked(MenuPanel.Settings);
-    }
-
-    public void OnBackToSongSelect()
-    {
-        OnBackButtonClicked(MenuPanel.SongSelect);
-    }
-
-    public void OnBackToDifficultySelect()
-    {
-        OnBackButtonClicked(MenuPanel.DifficultySelect);
-    }
-
-    private IEnumerator LoadSceneWithDelay(string sceneName)
-    {
-        LoadingScreen.Instance.NowLoading();
+        SetActivePanel(MenuPanel.LoadScene);
         yield return new WaitForSeconds(1f);
-        SceneManager.LoadScene(sceneName);
+        SetActivePanel(MenuPanel.MainMenu);
+    }
+
+    public void RestartGameScene()
+    {
+        // Stop the current game
+        GameManager.Instance.StopGame();
+
+        // Reset UI elements
+        UIManager.Instance.resetTimer();
+        UIManager.Instance.UpdateDayDisplay();
+        UIManager.Instance.UpdateMoneyDisplay();
+
+        // Start a new game
+        GameManager.Instance.StartGame();
+
+        // Ensure we're showing the game scene panel
+        SetActivePanel(MenuPanel.GameScene);
+
+        // Play a sound effect for restarting (optional)
+        AudioManager.Instance.PlaySFX(buttonClickSFX2);
+    }
+
+    public void ResumeGameScene()
+    {
+        Time.timeScale = 1;
+        AudioManager.Instance.PlaySFX(buttonClickSFX2);
+        GameManager.Instance.isPaused = false;
+    }
+
+    public void PauseGameScene()
+    {
+        Time.timeScale = 0;
+        AudioManager.Instance.PlaySFX(buttonClickSFX2);
     }
 }

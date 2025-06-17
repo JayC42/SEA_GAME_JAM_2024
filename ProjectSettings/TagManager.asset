@@ -10,6 +10,8 @@ TagManager:
   - Pizza
   - ExitPoint
   - Doughnut
+  - priceTag
+  - MoneyTable
   layers:
   - Default
   - TransparentFX

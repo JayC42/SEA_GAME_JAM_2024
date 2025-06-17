@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PlayerInventory : MonoBehaviour
 {
@@ -19,20 +20,37 @@ public class PlayerInventory : MonoBehaviour
     //public int dishUpgradeCount = 1; 
     public int maxDishCount = 3; // Start with 1 dish available by default
     private bool purchaseCustomerMaxQuantityUpgrade = false;   // Track if the upgrade has been purchased
+    public Dictionary<ShopItem, int> Upgrades = new Dictionary<ShopItem, int>();
 
-    // This method increments the number of dish upgrades the player has purchased
-    public void PurchaseDishUpgrade()
+    public void ApplyUpgrade(ShopItem upgrade)
     {
-        // For example, a player could purchase up to 3 upgrades
-        maxDishCount = Mathf.Clamp(maxDishCount + 1, 1, 3);
-        Debug.Log("Dish upgrade purchased. Current available dishes: " + maxDishCount);
+        if (!Upgrades.ContainsKey(upgrade))
+        {
+            Upgrades.Add(upgrade, upgrade.price);
+            InitializeUpgradeEffect(upgrade);
+            // Debug.Log($"Purchased new item: {upgrade.itemName}");
+        }
     }
 
-    // Optionally, you could refund a dish upgrade
-    public void RefundDishUpgrade()
+    private void InitializeUpgradeEffect(ShopItem upgrade)
     {
-        maxDishCount = Mathf.Clamp(maxDishCount - 1, 1, 3);
-        Debug.Log("Dish upgrade refunded. Current available dishes: " + maxDishCount);
+        upgrade.ApplyEffect();
+        // Additional logic can be added here if needed
+    }
+    public void RemoveUpgrade(ShopItem upgrade)
+    {
+        if (Upgrades.ContainsKey(upgrade))
+        {
+            Upgrades.Remove(upgrade);
+            ReverseUpgradeEffect(upgrade);
+        }
+    }
+    private void ReverseUpgradeEffect(ShopItem upgrade)
+    {
+        // This method should reverse the effect of the upgrade
+        // You might need to implement a new method in ShopItem class for this
+        upgrade.ReverseEffect();
+        // Additional logic can be added here if needed
     }
 
     // Retrieve the current dish upgrade count
@@ -50,5 +68,20 @@ public class PlayerInventory : MonoBehaviour
     public bool IsCustomerMaxQuantityUpgradePurchased()
     {
         return purchaseCustomerMaxQuantityUpgrade;
+    }
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            PrintPurchasedItems();
+        }
+    }
+    public void PrintPurchasedItems()
+    {
+        // Debug.Log($"Total purchased items: {Upgrades.Count}");
+        foreach (var upgrade in Upgrades.Keys)
+        {
+            Debug.Log($"- {upgrade.itemName}");
+        }
     }
 }

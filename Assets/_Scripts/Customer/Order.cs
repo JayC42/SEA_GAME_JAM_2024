@@ -7,6 +7,7 @@ public class Order
     public List<int> dishQuantities; // the quantity of each dish ordered
     public List<List<string>> requiredIngredientsForEachDish; // Ingredients for each dish
     public DishData dish;
+    public float orderPrice;
     //public Order()
     //{
     //    orderedDishes = new List<DishData>();
@@ -77,6 +78,7 @@ public class Order
     }
     public bool ValidateOrder(List<DishData> servedDishes)
     {
+        // Debug.Log("DID SMTG");
         List<int> remainingQuantities = new List<int>(dishQuantities);
 
         foreach (DishData servedDish in servedDishes)

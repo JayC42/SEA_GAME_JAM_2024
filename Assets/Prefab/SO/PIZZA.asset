@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dishName: pizza
   price: 10
-  dishImage: {fileID: 5725138089961174551, guid: 085dd05192cc021438d48d6f186ac59b, type: 3}
+  dishImage: {fileID: 21300000, guid: 322f96baf3475f44f975e8abe6ad6158, type: 3}
   mandatoryIngredients:
   - dough
   - tomato
